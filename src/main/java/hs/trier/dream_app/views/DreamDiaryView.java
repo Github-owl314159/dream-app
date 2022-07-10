@@ -2,7 +2,7 @@ package hs.trier.dream_app.views;
 
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.Presenter;
-import hs.trier.dream_app.model.DreamDAO;
+import hs.trier.dream_app.dao.DreamDAO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -38,16 +38,21 @@ public class DreamDiaryView {
         init();
     }
 
+    @SuppressWarnings("unchecked")
     private void init() {
         dreamList = new TableView<>(DreamDAO.getDreams());
+
         TableColumn<Dream, String> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+
         TableColumn<Dream, String> titleColumn = new TableColumn<>("Title");
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+
         TableColumn<Dream, String> moodColumn = new TableColumn<>("Mood");
         moodColumn.setCellValueFactory(new PropertyValueFactory<>("mood"));
 
         dreamList.getColumns().addAll(dateColumn, titleColumn, moodColumn);
+
         dreamList.setOnMouseClicked((MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 showDream();
@@ -60,6 +65,7 @@ public class DreamDiaryView {
 
         Button openButton = new Button("Open Dream");
         openButton.setOnAction(e -> showDream());
+
         Button deleteButton = new Button("Delete Dream");
         deleteButton.setOnAction(e -> deleteDream());
 
@@ -157,5 +163,7 @@ public class DreamDiaryView {
     public void refreshDreamList() {
         dreamList.getItems().clear();
         dreamList.setItems(DreamDAO.getDreams());
+        if(!dreamList.getItems().isEmpty())
+            dreamList.getSelectionModel().select(0);
     }
 }

@@ -24,22 +24,31 @@ public class App extends Application {
 
         AnalyzeDreamView analyzeDreamView = new AnalyzeDreamView();
         presenter.setAnalyzeDreamView(analyzeDreamView);
+
         DreamDiaryView dreamDiaryView = new DreamDiaryView();
         presenter.setDreamDiaryView(dreamDiaryView);
+
         SymbolsView symbolsView = new SymbolsView();
         presenter.setDreamSymbolsView(symbolsView);
+
         HelpView helpView = new HelpView();
         presenter.setHelpView(helpView);
+
         MainView mainView = new MainView();
         presenter.setMainView(mainView);
+
         NewDreamView newDreamView = new NewDreamView();
         presenter.setNewDreamView(newDreamView);
+
         SearchView searchView = new SearchView();
         presenter.setSearchView(searchView);
+
         SettingsView settingsView = new SettingsView();
         presenter.setSettingsView(settingsView);
+
         ShowDreamView showDreamView = new ShowDreamView();
         presenter.setShowDreamView(showDreamView);
+
         EditDreamView editDreamView = new EditDreamView();
         presenter.setEditDreamView(editDreamView);
 

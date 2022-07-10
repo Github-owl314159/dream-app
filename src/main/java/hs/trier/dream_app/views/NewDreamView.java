@@ -2,7 +2,7 @@ package hs.trier.dream_app.views;
 
 import hs.trier.dream_app.Presenter;
 import hs.trier.dream_app.model.Dream;
-import hs.trier.dream_app.model.DreamDAO;
+import hs.trier.dream_app.dao.DreamDAO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;

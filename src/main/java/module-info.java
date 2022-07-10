@@ -9,4 +9,6 @@ module hs.trier.dream_app {
     opens hs.trier.dream_app.model to javafx.fxml;
     exports hs.trier.dream_app;
     exports hs.trier.dream_app.model;
+    exports hs.trier.dream_app.dao;
+    opens hs.trier.dream_app.dao to javafx.fxml;
 }

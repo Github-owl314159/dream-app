@@ -20,12 +20,9 @@ import javafx.util.Duration;
 public class MainView
 {
     private BorderPane root;
-    private HBox buttons;
-    private VBox top;
     private ScrollPane center, right;
-    private Button newDreamButton, dreamDiaryButton, searchButton, dreamSymbolsButton, helpButton, settingsButton;
     private Label statusBar, titleLabel;
-    private Presenter presenter;
+    private final Presenter presenter;
 
 
     public MainView()
@@ -36,23 +33,30 @@ public class MainView
 
     public void init()
     {
-        newDreamButton = new Button("New Dream");
+        Button newDreamButton = new Button("New Dream");
         newDreamButton.setOnAction(e -> presenter.onNewDream());
-        dreamDiaryButton = new Button("Dream Diary");
+
+        Button dreamDiaryButton = new Button("Dream Diary");
         dreamDiaryButton.setOnAction(e -> presenter.onDreamDiary());
-        searchButton = new Button("Search");
+
+        Button searchButton = new Button("Search");
         searchButton.setOnAction(e -> presenter.onSearch());
-        dreamSymbolsButton = new Button("Dream Symbols");
+
+        Button dreamSymbolsButton = new Button("Dream Symbols");
         dreamSymbolsButton.setOnAction(e -> presenter.onSymbols());
-        helpButton = new Button("Help");
+
+        Button helpButton = new Button("Help");
         helpButton.setOnAction(e -> presenter.onHelp());
-        settingsButton = new Button("Options");
+
+        Button settingsButton = new Button("Options");
         settingsButton.setOnAction(e -> presenter.onSettings());
 
-        buttons = new HBox();
+        HBox buttons = new HBox();
         buttons.getChildren().addAll(newDreamButton, dreamDiaryButton, searchButton, dreamSymbolsButton, helpButton, settingsButton);
+
         titleLabel = new Label("New Dream");
-        top = new VBox();
+
+        VBox top = new VBox();
         top.getChildren().addAll(buttons, titleLabel);
 
         statusBar = new Label("");
@@ -80,8 +84,6 @@ public class MainView
         right.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
         right.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         right.setStyle("-fx-background-color:transparent;");
-
-
     }
 
     public BorderPane getRoot()

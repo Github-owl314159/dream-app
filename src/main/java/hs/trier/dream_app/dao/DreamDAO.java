@@ -1,6 +1,7 @@
-package hs.trier.dream_app.model;
+package hs.trier.dream_app.dao;
 
 import hs.trier.dream_app.Database;
+import hs.trier.dream_app.model.Dream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -110,6 +111,6 @@ public class DreamDAO {
     }
 
     public static ObservableList<Dream> getDreams() {
-        return FXCollections.unmodifiableObservableList(DREAMS);
+        return FXCollections.observableArrayList(DREAMS);
     }
 }

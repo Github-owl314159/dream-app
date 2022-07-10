@@ -1,5 +1,7 @@
 package hs.trier.dream_app;
 
+import hs.trier.dream_app.dao.DreamDAO;
+import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.*;
 import hs.trier.dream_app.views.*;
 import hs.trier.dream_app.views.AnalyzeDreamView;

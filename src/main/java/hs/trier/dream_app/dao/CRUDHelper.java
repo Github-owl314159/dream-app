@@ -1,4 +1,4 @@
-package hs.trier.dream_app.model;
+package hs.trier.dream_app.dao;
 
 import hs.trier.dream_app.Database;
 

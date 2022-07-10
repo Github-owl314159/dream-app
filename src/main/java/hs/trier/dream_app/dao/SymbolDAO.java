@@ -1,6 +1,7 @@
-package hs.trier.dream_app.model;
+package hs.trier.dream_app.dao;
 
 import hs.trier.dream_app.Database;
+import hs.trier.dream_app.model.Symbol;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -101,6 +102,6 @@ public class SymbolDAO {
     }
 
     public static ObservableList<Symbol> getSymbols() {
-        return FXCollections.unmodifiableObservableList(SYMBOLS);
+        return FXCollections.observableArrayList(SYMBOLS);
     }
 }
