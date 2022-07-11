@@ -56,13 +56,15 @@ public class SymbolDAO {
         return Optional.empty();
     }
 
-    public static void create(String name, String description) {
+    public static int create(String name, String description) {
         int id = (int) CRUDHelper.create(TABLE_NAME,
                 new String[]{NAME_COLUMN, DESCRIPTION_COLUMN},
                 new String[]{name, description},
                 new int[]{Types.VARCHAR, Types.VARCHAR});
 
         SYMBOLS.add(new Symbol(id, name, description));
+
+        return id;
     }
 
     public static void update(Symbol symbol) {

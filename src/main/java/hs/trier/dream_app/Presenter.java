@@ -189,7 +189,6 @@ public class Presenter {
     public void onAnalyzeDream(int id) {
         mainView.resetView();
         Optional<Dream> dream = DreamDAO.getDream(id);
-//        model.testAnalyzeDream(dream);
         mainView.setContent(analyzeDreamView.getContent());
         mainView.setMetaContent(analyzeDreamView.getMetaContent());
         mainView.setTitle("Analyze Dream");

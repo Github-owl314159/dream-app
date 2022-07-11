@@ -1,5 +1,8 @@
 package hs.trier.dream_app.views;
 
+import hs.trier.dream_app.api.DeepImages;
+import hs.trier.dream_app.dao.SymbolDAO;
+import hs.trier.dream_app.model.DeepImage;
 import hs.trier.dream_app.model.Symbol;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,21 +11,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 public class AnalyzeDreamView {
-    private VBox content, metaContent, addSymbol;
-    private HBox buttons;
+    private VBox content, metaContent, addSymbolVBox;
+    private HBox buttonsHBox;
     private Label testText, testToken, testTokenWithoutDupes, testTokenWithoutStopwords, testStemmedToken, addSymbolLabel;
     private Button addButton;
     private Button saveButton;
     private Button cancelButton;
-    private TextField newSymbol;
-    private TextArea newInterpretation;
+    private TextField symbolTextField;
+    private TextArea descriptionTextArea;
+
+    private ImageView deepImageView;
 
     public AnalyzeDreamView() {
         init();
@@ -37,40 +44,73 @@ public class AnalyzeDreamView {
     }
 
     private void init() {
-        testText = new Label("");
-        testText.setWrapText(true);
-        testToken = new Label("");
-        testToken.setWrapText(true);
-        testTokenWithoutDupes = new Label("");
-        testTokenWithoutDupes.setWrapText(true);
-        testTokenWithoutStopwords = new Label("");
-        testTokenWithoutStopwords.setWrapText(true);
-        testStemmedToken = new Label("");
-        testStemmedToken.setWrapText(true);
+//        testText = new Label("");
+//        testText.setWrapText(true);
+//        testToken = new Label("");
+//        testToken.setWrapText(true);
+//        testTokenWithoutDupes = new Label("");
+//        testTokenWithoutDupes.setWrapText(true);
+//        testTokenWithoutStopwords = new Label("");
+//        testTokenWithoutStopwords.setWrapText(true);
+//        testStemmedToken = new Label("");
+//        testStemmedToken.setWrapText(true);
+
+        double maxWidth = 200;
+        double maxHeight = 300;
+
+        DeepImage.loadNewDeepImage();
+        deepImageView = new ImageView(DeepImage.getDeepImage());
+        deepImageView.setFitWidth(maxWidth);
+        deepImageView.setFitHeight(maxHeight);
+
+        deepImageView.imageProperty().addListener((obs, ov, nv) -> {
+            double aspectRatio = nv.getWidth() / nv.getHeight();
+
+            if (aspectRatio > 1.5) {
+                deepImageView.setFitWidth(maxWidth);
+                deepImageView.setFitHeight(maxWidth / aspectRatio);
+            } else {
+                deepImageView.setFitHeight(maxHeight);
+                deepImageView.setFitWidth(maxHeight * aspectRatio);
+            }
+        });
+
+        deepImageView.imageProperty().bind(DeepImage.deepImageProperty());
 
         content = new VBox();
-        content.getChildren().addAll(testText, testToken, testTokenWithoutDupes, testTokenWithoutStopwords, testStemmedToken);
+        content.getChildren().addAll(deepImageView);
 
         addButton = new Button("Add new Dream Symbol");
-        addButton.setOnAction(e -> addNewSymbol(true));
+        addButton.setOnAction(e -> addNewSymbol());
+
+        Button deepImageButton = new Button("Get Dream Image");
+        deepImageButton.setOnAction(e -> {
+            DeepImage.loadNewDeepImage();
+            e.consume();
+        });
+
         saveButton = new Button("Save Dream Symbol");
         saveButton.setOnAction(e -> saveNewSymbol());
+
         cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(e -> addNewSymbol(false));
+        cancelButton.setOnAction(e -> {
+            buttonsHBox.getChildren().addAll(addButton);
+            addSymbolVBox.getChildren().addAll(buttonsHBox);
+        });
 
-        buttons = new HBox();
-        buttons.getChildren().addAll(addButton);
+        buttonsHBox = new HBox();
+        buttonsHBox.getChildren().addAll(addButton, deepImageButton);
 
-        addSymbol = new VBox();
-        addSymbol.getChildren().addAll(buttons);
+        addSymbolVBox = new VBox();
+        addSymbolVBox.getChildren().addAll(buttonsHBox);
 
         metaContent = new VBox();
-        metaContent.getChildren().addAll(addSymbol);
+        metaContent.getChildren().addAll(addSymbolVBox);
 
         addSymbolLabel = new Label("Add new Dream Symbol:");
-        newSymbol = new TextField();
-        newInterpretation = new TextArea();
-        newInterpretation.setWrapText(true);
+        symbolTextField = new TextField();
+        descriptionTextArea = new TextArea();
+        descriptionTextArea.setWrapText(true);
 
         beautify();
     }
@@ -85,9 +125,9 @@ public class AnalyzeDreamView {
         metaContent.setAlignment(Pos.TOP_CENTER);
         metaContent.setPadding(new Insets(10));
         metaContent.setSpacing(20);
-        addSymbol.setPadding(new Insets(10));
-        addSymbol.setSpacing(20);
-        addSymbol.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        addSymbolVBox.setPadding(new Insets(10));
+        addSymbolVBox.setSpacing(20);
+        addSymbolVBox.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
     }
 
     public void showAnalyzedDream(ArrayList<Symbol> symbols, String text, String token, String tokenWithoutDupes, String tokenWithoutStopwords, String stemmedToken) {
@@ -97,47 +137,46 @@ public class AnalyzeDreamView {
         testTokenWithoutStopwords.setText("Stopwords killed: \n" + tokenWithoutStopwords);
         testStemmedToken.setText("Stemmed: \n" + stemmedToken);
         metaContent.getChildren().clear();
-        metaContent.getChildren().add(addSymbol);
+        metaContent.getChildren().add(addSymbolVBox);
 
         for (Symbol symbol : symbols) {
-            VBox temp = new VBox();
+            VBox temporaryVBox = new VBox();
             Label symbolLabel = new Label(symbol.getName());
-            Label interpretation = new Label(symbol.getDescription());
-            interpretation.setWrapText(true);
-            HBox buttons = new HBox();
-            Button accept = new Button("Accept Symbol");
-            Button discard = new Button("Discard Symbol");
-            buttons.getChildren().addAll(accept, discard);
-            temp.getChildren().addAll(symbolLabel, interpretation, buttons);
-            temp.setPadding(new Insets(10));
-            temp.setSpacing(20);
-            temp.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            metaContent.getChildren().add(temp);
+            Label descriptionLabel = new Label(symbol.getDescription());
+            descriptionLabel.setWrapText(true);
+            HBox buttonsHBox = new HBox();
+            Button acceptButton = new Button("Accept Symbol");
+            Button discardButton = new Button("Discard Symbol");
+            buttonsHBox.getChildren().addAll(acceptButton, discardButton);
+            temporaryVBox.getChildren().addAll(symbolLabel, descriptionLabel, buttonsHBox);
+            temporaryVBox.setPadding(new Insets(10));
+            temporaryVBox.setSpacing(20);
+            temporaryVBox.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            metaContent.getChildren().add(temporaryVBox);
             metaContent.setPrefWidth(400);
-            accept.setOnAction(e -> temp.getChildren().removeAll(buttons));
-            discard.setOnAction(e -> metaContent.getChildren().remove(temp));
+            acceptButton.setOnAction(e -> temporaryVBox.getChildren().removeAll(buttonsHBox));
+            discardButton.setOnAction(e -> metaContent.getChildren().remove(temporaryVBox));
         }
     }
 
-    public void addNewSymbol(boolean bool) {
-        buttons.getChildren().clear();
-        addSymbol.getChildren().clear();
+    public void addNewSymbol() {
+        buttonsHBox.getChildren().clear();
+        addSymbolVBox.getChildren().clear();
 
-        if (bool) {
-            newSymbol.setText("");
-            newSymbol.setPromptText("Enter Symbol");
-            newInterpretation.setText("");
-            newInterpretation.setPromptText("Enter Interpretation");
-            buttons.getChildren().addAll(saveButton, cancelButton);
-            addSymbol.getChildren().addAll(addSymbolLabel, newSymbol, newInterpretation, buttons);
-        } else {
-            buttons.getChildren().addAll(addButton);
-            addSymbol.getChildren().addAll(buttons);
-        }
+        symbolTextField.setText("");
+        symbolTextField.setPromptText("Enter name");
+        descriptionTextArea.setText("");
+        descriptionTextArea.setPromptText("Enter description");
+        buttonsHBox.getChildren().addAll(saveButton, cancelButton);
+        addSymbolVBox.getChildren().addAll(addSymbolLabel, symbolTextField, descriptionTextArea, buttonsHBox);
     }
 
     private void saveNewSymbol() {
-//        Symbol newSymbol = new Symbol(this.newSymbol.getText(), newInterpretation.getText());
+
+
+//        int id = SymbolDAO.create(symbolTextField.getText(), descriptionTextArea.getText());
+//        Optional<Symbol> newSymbol = SymbolDAO.getSymbol(id);
+//
 //        presenter.onSaveSymbol();
 //        addNewSymbol(false);
 //

@@ -1,5 +1,6 @@
 package hs.trier.dream_app;
 
+import hs.trier.dream_app.api.DeepImages;
 import hs.trier.dream_app.views.AnalyzeDreamView;
 import hs.trier.dream_app.views.DreamDiaryView;
 import hs.trier.dream_app.views.SymbolsView;
@@ -11,8 +12,13 @@ import hs.trier.dream_app.views.SearchView;
 import hs.trier.dream_app.views.SettingsView;
 import hs.trier.dream_app.views.ShowDreamView;
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 import static hs.trier.dream_app.Database.initializeDatabase;
 
