@@ -62,6 +62,7 @@ public class AnalyzeDreamView {
         deepImageView = new ImageView(DeepImage.getDeepImage());
         deepImageView.setFitWidth(maxWidth);
         deepImageView.setFitHeight(maxHeight);
+        deepImageView.setPreserveRatio(true);
 
         deepImageView.imageProperty().addListener((obs, ov, nv) -> {
             double aspectRatio = nv.getWidth() / nv.getHeight();

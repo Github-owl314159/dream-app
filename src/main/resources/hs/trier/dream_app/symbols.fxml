@@ -9,7 +9,7 @@
       <TextField fx:id="symbolTextField" />
       <TextArea fx:id="symbolTextArea" prefHeight="200.0" prefWidth="200.0" />
       <HBox prefHeight="100.0" prefWidth="200.0">
-         <Button fx:id="addSymbolButton" mnemonicParsing="false" text="Add Symbol" />
+         <Button onAction="#addSymbol" mnemonicParsing="false" text="Add Symbol" />
          <Button fx:id="editSymbolButton" mnemonicParsing="false" text="Edit Symbol" />
          <Button fx:id="deleteSymbolButton" mnemonicParsing="false" text="Delete Symbol" />
       </HBox>
