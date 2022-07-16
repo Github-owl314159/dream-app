@@ -6,15 +6,15 @@ import javafx.beans.property.SimpleStringProperty;
 public class Dream {
     private final int id;
     private final ReadOnlyStringProperty title;
-    private final ReadOnlyStringProperty text;
+    private final ReadOnlyStringProperty content;
     private final ReadOnlyStringProperty date;
     private final ReadOnlyStringProperty notes;
     private final ReadOnlyStringProperty mood;
 
-    public Dream(int id, String title, String text, String date, String notes, String mood) {
+    public Dream(int id, String title, String content, String date, String notes, String mood) {
         this.id = id;
         this.title = new SimpleStringProperty(title);
-        this.text = new SimpleStringProperty(text);
+        this.content = new SimpleStringProperty(content);
         this.date = new SimpleStringProperty(date);
         this.notes = new SimpleStringProperty(notes);
         this.mood = new SimpleStringProperty(mood);
@@ -24,12 +24,12 @@ public class Dream {
         return id;
     }
 
-    public String getText() {
-        return text.get();
+    public String getContent() {
+        return content.get();
     }
 
-    public ReadOnlyStringProperty textProperty() {
-        return text;
+    public ReadOnlyStringProperty contentProperty() {
+        return content;
     }
 
     public String getTitle() {
@@ -68,7 +68,7 @@ public class Dream {
     public String toString() {
         return "Dream{" +
                 "id=" + id +
-                ", text=" + text +
+                ", text=" + content +
                 ", title=" + title +
                 ", date=" + date +
                 ", notes=" + notes +

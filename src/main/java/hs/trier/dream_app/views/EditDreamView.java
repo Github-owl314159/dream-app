@@ -125,7 +125,7 @@ public class EditDreamView {
     public void showDream(Dream dream) {
         this.dream = dream;
         titleTextField.setText(dream.getTitle());
-        contentTextArea.setText(dream.getText());
+        contentTextArea.setText(dream.getContent());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
         LocalDate localDate = LocalDate.parse(dream.getDate(), formatter);
         datePicker.setValue(localDate);

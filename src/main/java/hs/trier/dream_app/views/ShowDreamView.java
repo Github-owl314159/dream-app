@@ -96,7 +96,7 @@ public class ShowDreamView {
     public void showDream(Dream dream) {
         this.dream = dream;
         dreamTitle.setText(dream.getTitle());
-        dreamText.setText(dream.getText());
+        dreamText.setText(dream.getContent());
         date.setText(dream.getDate());
         mood.setText(dream.getMood());
         notes.setText(dream.getNotes());

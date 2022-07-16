@@ -33,6 +33,7 @@ public class MainView
 
     public void init()
     {
+
         Button newDreamButton = new Button("New Dream");
         newDreamButton.setOnAction(e -> presenter.onNewDream());
 

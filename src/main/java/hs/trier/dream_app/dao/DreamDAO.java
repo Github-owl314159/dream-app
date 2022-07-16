@@ -78,7 +78,7 @@ public class DreamDAO {
         int rows = CRUDHelper.update(
                 TABLE_NAME,
                 new String[]{TITLE_COLUMN, TEXT_COLUMN, NOTES_COLUMN},
-                new String[]{dream.getTitle(), dream.getText(), dream.getNotes()},
+                new String[]{dream.getTitle(), dream.getContent(), dream.getNotes()},
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR},
                 ID_COLUMN,
                 Types.INTEGER,

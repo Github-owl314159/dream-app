@@ -122,7 +122,7 @@ public class Presenter {
         Dream dream = newDreamView.getCurrentDream();
         DreamDAO.create(
                 dream.getTitle(),
-                dream.getText(),
+                dream.getContent(),
                 dream.getNotes(),
                 dream.getMood()
         );

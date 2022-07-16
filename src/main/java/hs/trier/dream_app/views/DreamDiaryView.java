@@ -139,7 +139,7 @@ public class DreamDiaryView {
         date.setText(dream.getDate());
         mood.setText(dream.getMood());
         notes.setText(dream.getNotes());
-        text.setText(dream.getText());
+        text.setText(dream.getContent());
     }
 
     public void resetPreview() {
