@@ -2,19 +2,20 @@ package hs.trier.dream_app.model;
 
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Symbol {
-    private final int id;
-    private final ReadOnlyStringProperty name;
-    private final ReadOnlyStringProperty description;
+    private final Integer id;
+    private final StringProperty name;
+    private final StringProperty description;
 
-    public Symbol(int symbol_id, String name, String description) {
-        this.id = symbol_id;
+    public Symbol(Integer id, String name, String description) {
+        this.id = id;
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -26,12 +27,20 @@ public class Symbol {
         return name;
     }
 
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
     public String getDescription() {
         return description.get();
     }
 
     public ReadOnlyStringProperty descriptionProperty() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
     }
 
     @Override

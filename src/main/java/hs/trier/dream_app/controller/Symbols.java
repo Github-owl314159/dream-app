@@ -1,15 +1,19 @@
 package hs.trier.dream_app.controller;
 
+import hs.trier.dream_app.Util;
 import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.Symbol;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Symbols {
@@ -27,6 +31,7 @@ public class Symbols {
 
     @FXML
     private void initialize() {
+
         // populate tableView with symbol items
         symbolsTableView.setItems(SymbolDAO.getSymbols());
 
@@ -40,6 +45,12 @@ public class Symbols {
         // add columns to table
         //noinspection unchecked
         symbolsTableView.getColumns().addAll(nameTableColumn, descriptionTableColumn);
+
+        // to-do: sorting
+//        nameTableColumn.setSortable(true);
+//        nameTableColumn.setSortType(TableColumn.SortType.ASCENDING);
+//        symbolsTableView.getSortOrder().add(nameTableColumn);
+//        symbolsTableView.sort();
 
         // select first row when symbolsTableView is not empty
         if (!symbolsTableView.getItems().isEmpty()) {
@@ -74,7 +85,10 @@ public class Symbols {
     private void deleteSymbol(ActionEvent event) {
         // create dialog
         Dialog<Integer> dialog = new Dialog<>();
+
+        // get selected item
         Symbol selectedItem = symbolsTableView.getSelectionModel().getSelectedItem();
+
         // prepare dialog
         dialog.setTitle("Confirm Deletion");
         dialog.setHeaderText(String.format("Do you really want to delete the Symbol '%s'?", selectedItem.getName()));
@@ -86,22 +100,150 @@ public class Symbols {
         // disable other windows
         dialog.initModality(Modality.APPLICATION_MODAL);
 
-        dialog.setResultConverter(sel -> selectedItem.getId());
+        // configure result converter
+        dialog.setResultConverter(buttonType -> {
+            Integer result = null;
 
+            if (buttonType == ButtonType.YES)
+                result = selectedItem.getId();
+
+            return result;
+        });
+
+        // show dialog to user and wait for its completion
         Optional<Integer> optionalInteger = dialog.showAndWait();
+
+        // delete symbol if result is available
         optionalInteger.ifPresent(SymbolDAO::delete);
     }
 
     private void editSymbol(ActionEvent event) {
+        // get selected item
+        Symbol symbol = symbolsTableView.getSelectionModel().getSelectedItem();
 
+        // init dialog
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Edit Dialog");
+        dialog.setResizable(true);
+
+        // load dialog fxml
+        DialogPane dialogPane;
+        try {
+            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/symbols/edit-dialog.fxml")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // get handles on input fields/labels
+        TextField nameTextField = (TextField) dialogPane.lookup("#nameTextField");
+        TextArea descriptionTextArea = (TextArea) dialogPane.lookup("#descriptionTextArea");
+
+        // set textFields
+        nameTextField.setText(symbol.getName());
+        descriptionTextArea.setText(symbol.getDescription());
+
+        // get handle on OK button
+        Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+
+        /*
+         disable OK button if:
+         -> name is empty OR
+         -> description is empty OR
+         -> neither name nor description has changed
+        */
+        okButton.disableProperty().bind(
+                Bindings.createBooleanBinding(
+                        () -> nameTextField.getText().trim().isEmpty() ||
+                                descriptionTextArea.getText().trim().isEmpty() ||
+                                (nameTextField.getText().trim().equals(symbol.getName()) &&
+                                        descriptionTextArea.getText().trim().equals(symbol.getDescription())),
+                        nameTextField.textProperty(), descriptionTextArea.textProperty()
+                )
+        );
+
+        // configure result converter
+        dialog.setResultConverter((buttonType) -> {
+            Integer result = null;
+
+            if (buttonType == ButtonType.OK)
+                result = SymbolDAO.update(symbol.getId(), nameTextField.getText(), descriptionTextArea.getText());
+
+            return result;
+        });
+
+        // disable other windows
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        // show dialog to user and wait for its completion
+        dialog.setDialogPane(dialogPane);
+        Optional<Integer> optionalInteger = dialog.showAndWait();
+
+        optionalInteger.ifPresent(rowsAffected -> {
+            if (rowsAffected == 0)
+                showWarning();
+        });
+
+        // consume event
+        event.consume();
     }
 
     @FXML
     private void addSymbol(ActionEvent event) {
-        // get dialog
-        Dialog<Integer> dialog = getDialog();
+        // create new dialog
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Add Dialog");
+        dialog.setResizable(true);
+
+        // load dialog fxml
+        DialogPane dialogPane;
+        try {
+            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/symbols/add-dialog.fxml")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // get handles on input fields/labels
+        TextField nameTextField = (TextField) dialogPane.lookup("#nameTextField");
+        TextArea descriptionTextArea = (TextArea) dialogPane.lookup("#descriptionTextArea");
+        Label symbolExistsLabel = (Label) dialogPane.lookup("#symbolExistsLabel");
+
+        // create booleanBinding
+        BooleanBinding symbolExistsIgnoreCaseBinding = Bindings.createBooleanBinding(
+                () -> SymbolDAO.symbolExistsIgnoreCase(nameTextField.getText().trim()),
+                nameTextField.textProperty()
+        );
+
+        /*
+         disable OK button if:
+         -> name is empty OR
+         -> description is empty OR
+         -> name already exists
+        */
+        Bindings.createBooleanBinding(
+                () -> nameTextField.getText().trim().isEmpty() || descriptionTextArea.getText().trim().isEmpty()
+                        || symbolExistsIgnoreCaseBinding.get(),
+                nameTextField.textProperty(),
+                descriptionTextArea.textProperty()
+        );
+
+        // show info label when given symbol name already exists
+        symbolExistsLabel.visibleProperty().bind(symbolExistsIgnoreCaseBinding);
+
+        // convert user data to Symbol and save it if user clicked on OK button
+        dialog.setResultConverter((buttonType) -> {
+            Integer result = null;
+
+            if (buttonType == ButtonType.OK)
+                result = SymbolDAO.create(nameTextField.getText(), descriptionTextArea.getText());
+
+            return result;
+        });
+
+        // disable other windows
+        dialog.initModality(Modality.APPLICATION_MODAL);
 
         // show dialog to user and wait for its completion
+        dialog.setDialogPane(dialogPane);
         Optional<Integer> optionalInteger = dialog.showAndWait();
 
         // if result is not null
@@ -110,11 +252,10 @@ public class Symbols {
                     // show warning if result is -1
                     if (id == -1)
                         showWarning();
-                        // get recently added symbol from database and cache it
                     else {
-                        symbolsTableView.getItems().add(
-                                SymbolDAO.getSymbol(id).orElseThrow()
-                        );
+                        // make new item visible in view
+                        symbolsTableView.getSelectionModel().selectLast();
+                        SymbolDAO.getSymbol(id).ifPresent(symbol -> symbolsTableView.scrollTo(symbol.getId()));
                     }
                 }
         );
@@ -128,53 +269,5 @@ public class Symbols {
         alert.setTitle("Error");
         alert.setHeaderText("");
         alert.setContentText("");
-    }
-
-    private Dialog<Integer> getDialog() {
-        // create new dialog
-        Dialog<Integer> dialog = new Dialog<>();
-
-        // prepare the dialog
-        dialog.setTitle("New Dream Symbol");
-        dialog.setHeaderText("Add a new Dream Symbol to your list");
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setStyle("-fx-padding: 20;");
-        TextField nameTextField = new TextField();
-        nameTextField.setPromptText("Enter a name for the Dream Symbol...");
-        TextArea descriptionTextField = new TextArea();
-        descriptionTextField.setPromptText("Type in a description of the Dream Symbol...");
-
-        // add rows to dialog
-        gridPane.addRow(0, new Label("Symbol Name:"), nameTextField);
-        gridPane.addRow(1, new Label("Symbol Description:"), descriptionTextField);
-
-        // add buttons to dialog
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        // disable OK button if either no name or no description has been entered yet
-        dialog.getDialogPane().lookupButton(ButtonType.OK).disableProperty().bind(
-                Bindings.createBooleanBinding(
-                        () -> nameTextField.getText().trim().isEmpty() || descriptionTextField.getText().trim().isEmpty(),
-                        nameTextField.textProperty(),
-                        descriptionTextField.textProperty()
-                )
-        );
-
-        // convert user data to Symbol and save it if user clicked on OK button
-        dialog.setResultConverter((buttonType) -> {
-            if (buttonType == ButtonType.OK) {
-                return SymbolDAO.create(nameTextField.getText(), descriptionTextField.getText());
-            }
-            return null;
-        });
-
-        // disable other windows
-        dialog.initModality(Modality.APPLICATION_MODAL);
-
-        return dialog;
     }
 }

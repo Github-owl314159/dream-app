@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<DialogPane headerText="Add Dream Symbol" prefHeight="285.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <GridPane hgap="10.0" prefWidth="362.0" vgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.111083984375" minWidth="10.0" prefWidth="111.22217559814453" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.77782440185547" minWidth="10.0" prefWidth="218.77782440185547" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+        </rowConstraints>
+         <children>
+            <Label text="Symbol Name:" />
+            <Label text="Symbol Description:" GridPane.rowIndex="1" />
+            <TextField fx:id="nameTextField" promptText="Type in the name of the symbol..." GridPane.columnIndex="1" />
+            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Type in the description of the symbol..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="symbolExistsLabel" style="-fx-text-fill: red;;" text="Symbol already exists." GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+   </content>
+   <buttonTypes>
+      <ButtonType fx:constant="OK" />
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</DialogPane>

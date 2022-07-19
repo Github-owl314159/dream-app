@@ -163,12 +163,12 @@ public class Presenter {
     public void onSaveSymbol(String name, String descr) {
         SymbolDAO.create(name, descr);
         mainView.showInStatusBar("Dream Symbol '" + name + "' saved.");
-        symbolsView.showSymbols(SymbolDAO.getSymbols());
+//        symbolsView.showSymbols(SymbolDAO.getSymbols());
     }
 
     public void onUpdateDreamSymbol(Symbol symbol) {
         mainView.showInStatusBar("Dream Symbol '" + symbol.getName() + "' updated.");
-        symbolsView.showSymbols(SymbolDAO.getSymbols());
+//        symbolsView.showSymbols(SymbolDAO.getSymbols());
     }
 
     public Boolean onDeleteDreamSymbol(Symbol symbol) {
@@ -212,7 +212,7 @@ public class Presenter {
         mainView.setContent(symbolsView.getContent());
         mainView.setMetaContent(symbolsView.getMetaContent());
         mainView.setTitle("Dream Symbols");
-        symbolsView.showSymbols(SymbolDAO.getSymbols());
+//        symbolsView.showSymbols(SymbolDAO.getSymbols());
     }
 
     public void onHelp() {

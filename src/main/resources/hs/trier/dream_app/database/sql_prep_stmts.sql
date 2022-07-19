@@ -1,6 +1,7 @@
 -- DB preparation
 
 -- deep_dreams_by_dream table alias 'dbd'
+
 CREATE TABLE dbd(
     id INTEGER PRIMARY KEY,
     dream_id INTEGER,
