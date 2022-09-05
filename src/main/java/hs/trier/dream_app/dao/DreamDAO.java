@@ -113,4 +113,8 @@ public class DreamDAO {
     public static ObservableList<Dream> getDreams() {
         return FXCollections.observableArrayList(DREAMS);
     }
+
+    public static boolean dreamExistsIgnoreCase(String dreamTitle) {
+        return DREAMS.stream().anyMatch(dream -> dream.getTitle().equalsIgnoreCase(dreamTitle));
+    }
 }

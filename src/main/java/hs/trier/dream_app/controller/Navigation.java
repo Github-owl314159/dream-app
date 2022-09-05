@@ -13,46 +13,24 @@ public class Navigation {
     @FXML
     private VBox contentPane;
 
-    public Navigation() {
-    }
-
     @FXML
     private void initialize() {
-        FXMLLoader loader = new FXMLLoader(Util.getAbsoluteURL("views/page.fxml"));
-
-        Node page;
-        try {
-            page = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        contentPane.getChildren().clear();
-        contentPane.getChildren().add(page);
+        Util.getInstance().setContentPane(contentPane);
+        Util.getInstance().loadFXML("views/new-dream.fxml");
     }
 
     @FXML
-    private void onPageButton() {
-        loadFXML("views/page.fxml");
+    private void onNewDreamButton() {
+        Util.getInstance().loadFXML("views/new-dream.fxml");
     }
 
     @FXML
     private void onLibraryButton() {
-        loadFXML("views/library.fxml");
+        Util.getInstance().loadFXML("views/library.fxml");
     }
 
     @FXML
     private void onSymbolsButton() {
-        loadFXML("views/symbols/symbols.fxml");
-    }
-
-    private void loadFXML(String fxml) {
-        Node root;
-        try {
-            root = FXMLLoader.load(Util.getAbsoluteURL(fxml));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        contentPane.getChildren().clear();
-        contentPane.getChildren().add(root);
+        Util.getInstance().loadFXML("views/symbols/symbols.fxml");
     }
 }

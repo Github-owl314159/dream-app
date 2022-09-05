@@ -1,3 +1,28 @@
-.root {
-    -fx-background-color: #000000;
+#sidebar {
+    -fx-background-color: #303A4B;
+}
+
+.bg-dark {
+    -fx-background-color: #3A465A;
+}
+
+.label {
+    -fx-font-family: "Segoe Print";
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18;
+}
+
+.text-area, .text-field {
+    -fx-font-family: "Segoe Print";
+    -fx-font-size: 14;
+}
+
+.button {
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: Bold;
+    -fx-background-color: #815ADD;
+    -fx-border-color: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 5px;
+    -fx-font-size: 16;
 }

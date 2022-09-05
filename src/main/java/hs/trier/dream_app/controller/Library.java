@@ -1,13 +1,21 @@
 package hs.trier.dream_app.controller;
 
+import hs.trier.dream_app.Util;
 import hs.trier.dream_app.dao.DreamDAO;
+import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.Dream;
+import hs.trier.dream_app.model.Symbol;
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+
+import java.io.IOException;
+import java.util.Optional;
 
 public class Library {
     @FXML
@@ -16,6 +24,16 @@ public class Library {
     private TextArea contentTextArea;
     @FXML
     private TextField titleTextField;
+    @FXML
+    private Button editDreamButton;
+    @FXML
+    private Button deleteDreamButton;
+    @FXML
+    private TextField dateTextField;
+    @FXML
+    private TextField moodTextField;
+    @FXML
+    private TextArea notesTextArea;
 
     @FXML
     private void initialize() {
@@ -50,6 +68,9 @@ public class Library {
             // populate preview fields
             titleTextField.setText(dream.getTitle());
             contentTextArea.setText(dream.getContent());
+            dateTextField.setText(dream.getDate());
+            moodTextField.setText(dream.getMood());
+            notesTextArea.setText(dream.getNotes());
 
             // visual selection
             dreamsTableView.requestFocus();
@@ -61,6 +82,59 @@ public class Library {
         dreamsTableView.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
             titleTextField.setText(nv.getTitle());
             contentTextArea.setText(nv.getContent());
+            dateTextField.setText(nv.getDate());
+            moodTextField.setText(nv.getMood());
+            notesTextArea.setText(nv.getNotes());
         });
+
+        // set event handler
+        editDreamButton.setOnAction(this::editDream);
+        deleteDreamButton.setOnAction(this::deleteDream);
+
+        // disable edit and delete buttons if no item is selected
+        editDreamButton.disableProperty().bind(Bindings.isEmpty(dreamsTableView.getSelectionModel().getSelectedItems()));
+        deleteDreamButton.disableProperty().bind(Bindings.isEmpty(dreamsTableView.getSelectionModel().getSelectedItems()));
+    }
+
+    private void deleteDream(ActionEvent actionEvent) {
+        // create dialog
+        Dialog<Integer> dialog = new Dialog<>();
+
+        // get selected item
+        Dream selectedItem = dreamsTableView.getSelectionModel().getSelectedItem();
+
+        // prepare dialog
+        dialog.setTitle("Confirm Deletion");
+        dialog.setHeaderText(String.format("Do you really want to delete the Dream '%s'?", selectedItem.getTitle()));
+        dialog.getDialogPane().setStyle("-fx-padding: 20;");
+
+        // add buttons to dialog
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NO, ButtonType.YES);
+
+        // disable other windows
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        // configure result converter
+        dialog.setResultConverter(buttonType -> {
+            Integer result = null;
+
+            if (buttonType == ButtonType.YES)
+                result = selectedItem.getId();
+
+            return result;
+        });
+
+        // show dialog to user and wait for its completion
+        Optional<Integer> optionalInteger = dialog.showAndWait();
+
+        // delete dream if result is available
+        optionalInteger.ifPresent(DreamDAO::delete);
+    }
+
+    private void editDream(ActionEvent actionEvent) {
+        Dream selectedItem = dreamsTableView.getSelectionModel().getSelectedItem();
+        NewDream controller = (NewDream) Util.getInstance().loadFXML("views/new-dream.fxml");
+
+        controller.editDream(selectedItem);
     }
 }
