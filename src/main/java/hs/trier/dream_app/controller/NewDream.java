@@ -51,22 +51,18 @@ public class NewDream {
                 moodTextField.getText().trim()
         );
 
+        Alert alert;
         if (result != -1) {
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Successfully saved Dream!");
-
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.show();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("An Error occurred!");
-
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.show();
         }
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.show();
 
         // consume event
         actionEvent.consume();

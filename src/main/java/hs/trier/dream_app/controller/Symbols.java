@@ -31,7 +31,6 @@ public class Symbols {
 
     @FXML
     private void initialize() {
-
         // populate tableView with symbol items
         symbolsTableView.setItems(SymbolDAO.getSymbols());
 
@@ -99,6 +98,7 @@ public class Symbols {
 
         // disable other windows
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(symbolsTableView.getScene().getWindow());
 
         // configure result converter
         dialog.setResultConverter(buttonType -> {
@@ -173,6 +173,7 @@ public class Symbols {
 
         // disable other windows
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(symbolsTableView.getScene().getWindow());
 
         // show dialog to user and wait for its completion
         dialog.setDialogPane(dialogPane);
@@ -241,6 +242,7 @@ public class Symbols {
 
         // disable other windows
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(symbolsTableView.getScene().getWindow());
 
         // show dialog to user and wait for its completion
         dialog.setDialogPane(dialogPane);

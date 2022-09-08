@@ -3,7 +3,9 @@ package hs.trier.dream_app.dao;
 import hs.trier.dream_app.Database;
 import hs.trier.dream_app.model.Dream;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -19,11 +21,24 @@ public class DreamDAO {
     private static final String DATE_COLUMN = "date";
     private static final String NOTES_COLUMN = "notes";
     private static final String MOOD_COLUMN = "mood";
-    private static final ObservableList<Dream> DREAMS;
+    private static final ObservableList<Dream> DREAMS_LIST;
+    private static final ObservableMap<Integer, Dream> DREAMS_MAP;
 
     static {
-        DREAMS = FXCollections.observableArrayList();
+        DREAMS_MAP = FXCollections.observableHashMap();
         updateDreamsFromDB();
+        DREAMS_LIST = FXCollections.observableArrayList(DREAMS_MAP.values());
+
+        DREAMS_MAP.addListener((MapChangeListener<Integer, Dream>) change -> {
+            if (change.wasAdded() && change.wasRemoved()) {
+                DREAMS_LIST.remove(change.getValueRemoved());
+                DREAMS_LIST.add(change.getValueAdded());
+            } else if (change.wasAdded()) {
+                DREAMS_LIST.add(change.getValueAdded());
+            } else {
+                DREAMS_LIST.remove(change.getValueRemoved());
+            }
+        });
     }
 
     private static void updateDreamsFromDB() {
@@ -34,9 +49,9 @@ public class DreamDAO {
 
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
-            DREAMS.clear();
+            DREAMS_MAP.clear();
             while (rs.next()) {
-                DREAMS.add(new Dream(
+                DREAMS_MAP.put(rs.getInt(ID_COLUMN), new Dream(
                         rs.getInt(ID_COLUMN),
                         rs.getString(TITLE_COLUMN),
                         rs.getString(TEXT_COLUMN),
@@ -50,7 +65,7 @@ public class DreamDAO {
                     Level.SEVERE,
                     LocalDateTime.now() + ": Could not load Dreams from Database."
             );
-            DREAMS.clear();
+            DREAMS_MAP.clear();
         }
     }
 
@@ -61,17 +76,16 @@ public class DreamDAO {
                 new String[]{title, text, now.toString(), notes, mood},
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
 
-        DREAMS.add(new Dream(id, title, text, now.toString(), notes, mood));
+        if (id == 0) {
+            throw new IllegalStateException("Dream " + title + " could not have been created. No creation possible.");
+        } else
+            DREAMS_MAP.put(id, new Dream(id, title, text, now.toString(), notes, mood));
 
         return id;
     }
 
     public static Optional<Dream> getDream(int id) {
-        for (Dream dream : DREAMS) {
-            if (dream.getId() == id)
-                return Optional.of(dream);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(DREAMS_MAP.get(id));
     }
 
     public static void update(Dream dream) {
@@ -90,8 +104,8 @@ public class DreamDAO {
 
         Optional<Dream> optionalDream = getDream(dream.getId());
         optionalDream.ifPresentOrElse((oldDream) -> {
-            DREAMS.remove(oldDream);
-            DREAMS.add(dream);
+            DREAMS_LIST.remove(oldDream);
+            DREAMS_LIST.add(dream);
         }, () -> {
             throw new IllegalStateException("Dream " + dream.getId() + " did not exist in database. No update possible.");
         });
@@ -102,19 +116,16 @@ public class DreamDAO {
 
         if (rows != 1)
             throw new IllegalStateException("Dream " + id + " did not exist in database. No delete operation possible.");
-
-        Optional<Dream> optionalDream = getDream(id);
-
-        optionalDream.ifPresentOrElse(DREAMS::remove, () -> {
-            throw new IllegalStateException("Dream did not exist in cache.");
-        });
+        else
+            DREAMS_MAP.remove(id);
     }
 
+    // return list of dreams
     public static ObservableList<Dream> getDreams() {
-        return FXCollections.observableArrayList(DREAMS);
+        return FXCollections.unmodifiableObservableList(DREAMS_LIST);
     }
 
     public static boolean dreamExistsIgnoreCase(String dreamTitle) {
-        return DREAMS.stream().anyMatch(dream -> dream.getTitle().equalsIgnoreCase(dreamTitle));
+        return DREAMS_LIST.stream().anyMatch(dream -> dream.getTitle().equalsIgnoreCase(dreamTitle));
     }
 }

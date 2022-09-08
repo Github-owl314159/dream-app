@@ -2,19 +2,14 @@ package hs.trier.dream_app.controller;
 
 import hs.trier.dream_app.Util;
 import hs.trier.dream_app.dao.DreamDAO;
-import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.Dream;
-import hs.trier.dream_app.model.Symbol;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class Library {
@@ -80,11 +75,19 @@ public class Library {
 
         // callback: populate preview fields whenever selected item changes
         dreamsTableView.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
-            titleTextField.setText(nv.getTitle());
-            contentTextArea.setText(nv.getContent());
-            dateTextField.setText(nv.getDate());
-            moodTextField.setText(nv.getMood());
-            notesTextArea.setText(nv.getNotes());
+            if(nv != null) {
+                titleTextField.setText(nv.getTitle());
+                contentTextArea.setText(nv.getContent());
+                dateTextField.setText(nv.getDate());
+                moodTextField.setText(nv.getMood());
+                notesTextArea.setText(nv.getNotes());
+            } else {
+                titleTextField.clear();
+                contentTextArea.clear();
+                dateTextField.clear();
+                moodTextField.clear();
+                notesTextArea.clear();
+            }
         });
 
         // set event handler
@@ -112,7 +115,8 @@ public class Library {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NO, ButtonType.YES);
 
         // disable other windows
-        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(contentTextArea.getScene().getWindow());
 
         // configure result converter
         dialog.setResultConverter(buttonType -> {

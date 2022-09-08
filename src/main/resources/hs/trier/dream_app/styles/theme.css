@@ -26,3 +26,33 @@
     -fx-border-radius: 5px;
     -fx-font-size: 16;
 }
+
+.button:hover{
+    -fx-background-color:white;
+    -fx-text-fill:black;
+}
+
+.button:armed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+
+.button:cancel {
+    -fx-background-color: #3A465A;
+    -fx-text-fill: red;
+    -fx-border-color: red;
+}
+
+.button:default {
+    -fx-background-color: #3A465A;
+    -fx-text-fill: green;
+    -fx-border-color: green;
+}
+
+DialogPane {
+    -fx-background-color: #303A4B;
+}
+
+DialogPane > GridPane {
+    -fx-background-color: #3A465A;
+}

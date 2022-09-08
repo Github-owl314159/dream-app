@@ -49,7 +49,6 @@ public class SymbolDAO {
             ResultSet rs = statement.executeQuery();
             SYMBOLS_MAP.clear();
             while (rs.next()) {
-
                 SYMBOLS_MAP.put(rs.getInt(ID_COLUMN), new Symbol(
                         rs.getInt(ID_COLUMN),
                         rs.getString(NAME_COLUMN),
@@ -81,9 +80,8 @@ public class SymbolDAO {
 
         if (id == 0) {
             throw new IllegalStateException("Symbol " + name + " could not have been created. No creation possible.");
-        } else {
+        } else
             SYMBOLS_MAP.put(id, new Symbol(id, name, description));
-        }
 
         return id;
     }
