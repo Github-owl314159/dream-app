@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="891.0" styleClass="bg-dark" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.Navigation">
-     <VBox id="sidebar" alignment="CENTER">
+     <VBox id="sidebar" alignment="TOP_CENTER">
       <ImageView fitHeight="225.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/logo.png" />
@@ -49,5 +49,5 @@
          <Insets left="20.0" right="20.0" top="20.0" />
       </padding>
      </VBox>
-     <VBox fx:id="contentPane" alignment="CENTER" styleClass="bg-dark" HBox.hgrow="SOMETIMES" />
+     <VBox fx:id="contentPane" alignment="TOP_CENTER" styleClass="bg-dark" HBox.hgrow="SOMETIMES" />
  </HBox>
