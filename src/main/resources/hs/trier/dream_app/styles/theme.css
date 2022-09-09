@@ -63,3 +63,7 @@ DialogPane > GridPane {
     -fx-text-fill: #815ADD;
     -fx-underline: true;
 }
+
+.html-editor .grid ToolBar {
+    visibility: hidden;
+}

@@ -7,6 +7,7 @@ module hs.trier.dream_app {
     requires unirest.java;
     requires com.google.gson;
     requires javafx.swing;
+    requires javafx.web;
 
     opens hs.trier.dream_app to javafx.fxml;
     opens hs.trier.dream_app.model to javafx.fxml;

@@ -24,6 +24,8 @@ public class Library {
     @FXML
     private Button deleteDreamButton;
     @FXML
+    private Button searchDreamSymbolsButton;
+    @FXML
     private TextField dateTextField;
     @FXML
     private TextField moodTextField;
@@ -75,7 +77,7 @@ public class Library {
 
         // callback: populate preview fields whenever selected item changes
         dreamsTableView.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
-            if(nv != null) {
+            if (nv != null) {
                 titleTextField.setText(nv.getTitle());
                 contentTextArea.setText(nv.getContent());
                 dateTextField.setText(nv.getDate());
@@ -93,10 +95,12 @@ public class Library {
         // set event handler
         editDreamButton.setOnAction(this::editDream);
         deleteDreamButton.setOnAction(this::deleteDream);
+        searchDreamSymbolsButton.setOnAction(this::searchDreamSymbols);
 
         // disable edit and delete buttons if no item is selected
         editDreamButton.disableProperty().bind(Bindings.isEmpty(dreamsTableView.getSelectionModel().getSelectedItems()));
         deleteDreamButton.disableProperty().bind(Bindings.isEmpty(dreamsTableView.getSelectionModel().getSelectedItems()));
+        searchDreamSymbolsButton.disableProperty().bind(Bindings.isEmpty(dreamsTableView.getSelectionModel().getSelectedItems()));
     }
 
     private void deleteDream(ActionEvent actionEvent) {
@@ -140,5 +144,14 @@ public class Library {
         NewDream controller = (NewDream) Util.getInstance().loadFXML("views/new-dream.fxml");
 
         controller.editDream(selectedItem);
+        actionEvent.consume();
+    }
+
+    private void searchDreamSymbols(ActionEvent actionEvent) {
+        Dream selectedItem = dreamsTableView.getSelectionModel().getSelectedItem();
+        DreamAnalyze controller = (DreamAnalyze) Util.getInstance().loadFXML("views/analyze.fxml");
+
+        controller.analyze(selectedItem);
+        actionEvent.consume();
     }
 }

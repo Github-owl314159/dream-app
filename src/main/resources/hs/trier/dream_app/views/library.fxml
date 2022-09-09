@@ -32,6 +32,7 @@
                <children>
                   <Button fx:id="editDreamButton" minWidth="-Infinity" mnemonicParsing="false" text="Edit Dream" />
                   <Button fx:id="deleteDreamButton" minWidth="-Infinity" mnemonicParsing="false" text="Delete Dream" />
+                  <Button fx:id="searchDreamSymbolsButton" layoutX="96.0" layoutY="10.0" minWidth="-Infinity" mnemonicParsing="false" text="Search Dream Symbols" />
                </children>
             </HBox>
          </VBox>
