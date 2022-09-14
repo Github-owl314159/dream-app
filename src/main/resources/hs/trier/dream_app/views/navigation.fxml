@@ -7,34 +7,32 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="891.0" styleClass="bg-dark" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.Navigation">
-     <VBox id="sidebar" alignment="TOP_CENTER">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" styleClass="bg-dark" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.Navigation">
+     <VBox id="sidebar" alignment="TOP_CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="230.0" spacing="20.0">
       <ImageView fitHeight="225.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true">
-         <image>
             <Image url="@../img/logo.png" />
-         </image>
       </ImageView>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
          <children>
-               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewDreamButton" prefWidth="145.0" style="-fx-background-radius: 5px;" text="New Dream">
+               <Button alignment="TOP_CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewDreamButton" prefWidth="170.0" style="-fx-background-radius: 5px;" text="New Dream" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <padding>
                   <Insets bottom="9.0" left="10.0" right="10.0" top="7.0" />
                </padding>
             </Button>
-               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onLibraryButton" prefWidth="145.0" text="Dream Library">
+               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onLibraryButton" prefWidth="170.0" text="Dream Library" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <padding>
                   <Insets bottom="9.0" left="10.0" right="10.0" top="7.0" />
                </padding>
             </Button>
-               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSymbolsButton" prefWidth="145.0" text="Dream Symbols">
+               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSymbolsButton" prefWidth="170.0" text="Dream Symbols" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <padding>
                   <Insets bottom="9.0" left="10.0" right="10.0" top="7.0" />

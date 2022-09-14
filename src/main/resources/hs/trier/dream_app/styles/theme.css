@@ -59,7 +59,6 @@ DialogPane > GridPane {
 
 .header {
     -fx-font-size: 24px;
-    -fx-padding: 50px 0 50px 0;
     -fx-text-fill: #815ADD;
     -fx-underline: true;
 }

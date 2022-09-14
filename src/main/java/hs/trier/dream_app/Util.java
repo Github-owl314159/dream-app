@@ -7,6 +7,8 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Util {
 
@@ -54,9 +56,15 @@ public class Util {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        contentPane.getChildren().clear();
+        contentPane.getChildren().clear();               //TODO Martin: Dass der Content in der Util-Klasse geändert wird, da wär ich nach GBO nicht drauf gekommen^^
         contentPane.getChildren().add(root);
 
         return loader.getController();
     }
+
+    public static LocalDate convertDate (String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date, formatter);
+    }
+
 }

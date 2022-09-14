@@ -38,18 +38,15 @@ public class Symbols {
         TableColumn<Symbol, String> nameTableColumn = new TableColumn<>("Name");
         nameTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Symbol, String> descriptionTableColumn = new TableColumn<>("Description");
-        descriptionTableColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-
         // add columns to table
         //noinspection unchecked
-        symbolsTableView.getColumns().addAll(nameTableColumn, descriptionTableColumn);
+        symbolsTableView.getColumns().addAll(nameTableColumn);
 
-        // to-do: sorting
-//        nameTableColumn.setSortable(true);
-//        nameTableColumn.setSortType(TableColumn.SortType.ASCENDING);
-//        symbolsTableView.getSortOrder().add(nameTableColumn);
-//        symbolsTableView.sort();
+        // sorting
+        nameTableColumn.setSortable(true);
+        nameTableColumn.setSortType(TableColumn.SortType.ASCENDING);
+        symbolsTableView.getSortOrder().add(nameTableColumn);
+        symbolsTableView.sort();
 
         // select first row when symbolsTableView is not empty
         if (!symbolsTableView.getItems().isEmpty()) {
@@ -155,7 +152,7 @@ public class Symbols {
                 Bindings.createBooleanBinding(
                         () -> nameTextField.getText().trim().isEmpty() ||
                                 descriptionTextArea.getText().trim().isEmpty() ||
-                                (nameTextField.getText().trim().equals(symbol.getName()) &&
+                                       (nameTextField.getText().trim().equals(symbol.getName()) &&
                                         descriptionTextArea.getText().trim().equals(symbol.getDescription())),
                         nameTextField.textProperty(), descriptionTextArea.textProperty()
                 )

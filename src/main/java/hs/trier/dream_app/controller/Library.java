@@ -6,6 +6,7 @@ import hs.trier.dream_app.model.Dream;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
@@ -34,28 +35,27 @@ public class Library {
 
     @FXML
     private void initialize() {
-        // populate tableView with dream items
-        dreamsTableView.setItems(DreamDAO.getDreams());
+
 
         // create table columns and set bindings
+        TableColumn<Dream, String> dateTableColumn = new TableColumn<>("Date");
+        dateTableColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn<Dream, String> titleTableColumn = new TableColumn<>("Title");
         titleTableColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 
-        TableColumn<Dream, String> contentTableColumn = new TableColumn<>("Content");
-        contentTableColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
-
-        TableColumn<Dream, String> dateTableColumn = new TableColumn<>("Date");
-        dateTableColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-        TableColumn<Dream, String> notesTableColumn = new TableColumn<>("Notes");
-        notesTableColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
-
-        TableColumn<Dream, String> moodTableColumn = new TableColumn<>("Mood");
-        moodTableColumn.setCellValueFactory(new PropertyValueFactory<>("mood"));
-
         // add columns to table
         //noinspection unchecked
-        dreamsTableView.getColumns().addAll(titleTableColumn, contentTableColumn, dateTableColumn, notesTableColumn, moodTableColumn);
+        dreamsTableView.getColumns().addAll(dateTableColumn, titleTableColumn);
+
+        // populate tableView with dream items
+        dreamsTableView.setItems(DreamDAO.getDreams());
+
+        // sorting
+        dateTableColumn.setSortable(true);
+        titleTableColumn.setSortable(true);
+        dateTableColumn.setSortType(TableColumn.SortType.DESCENDING);
+        dreamsTableView.getSortOrder().addAll(dateTableColumn);
+        dreamsTableView.sort();
 
         // select first row when dreamsTableView is not empty
         if (!dreamsTableView.getItems().isEmpty()) {
@@ -92,7 +92,7 @@ public class Library {
             }
         });
 
-        // set event handler
+        // set event handler                                     //TODO Martin: gehört das nicht ins fxml?
         editDreamButton.setOnAction(this::editDream);
         deleteDreamButton.setOnAction(this::deleteDream);
         searchDreamSymbolsButton.setOnAction(this::searchDreamSymbols);
