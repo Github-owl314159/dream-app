@@ -121,6 +121,6 @@ public class SymbolDAO {
 
     // return list of symbols
     public static ObservableList<Symbol> getSymbols() {
-        return FXCollections.unmodifiableObservableList(SYMBOLS_LIST);
+        return SYMBOLS_LIST;
     }
 }

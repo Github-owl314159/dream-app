@@ -4,12 +4,12 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Dream {
-    private final int id;
-    private final ReadOnlyStringProperty title;
-    private final ReadOnlyStringProperty content;
-    private final ReadOnlyStringProperty date;
-    private final ReadOnlyStringProperty notes;
-    private final ReadOnlyStringProperty mood;
+    private int id;
+    private SimpleStringProperty title;
+    private SimpleStringProperty content;
+    private SimpleStringProperty date;
+    private SimpleStringProperty notes;
+    private SimpleStringProperty mood;
 
     public Dream(int id, String title, String content, String date, String notes, String mood) {
         this.id = id;
@@ -32,7 +32,7 @@ public class Dream {
         return content.get();
     }
 
-    public ReadOnlyStringProperty contentProperty() {
+    public SimpleStringProperty contentProperty() {
         return content;
     }
 
@@ -40,7 +40,7 @@ public class Dream {
         return title.get();
     }
 
-    public ReadOnlyStringProperty titleProperty() {
+    public SimpleStringProperty titleProperty() {
         return title;
     }
 
@@ -48,7 +48,7 @@ public class Dream {
         return date.get();
     }
 
-    public ReadOnlyStringProperty dateProperty() {
+    public SimpleStringProperty dateProperty() {
         return date;
     }
 
@@ -56,7 +56,7 @@ public class Dream {
         return notes.get();
     }
 
-    public ReadOnlyStringProperty notesProperty() {
+    public SimpleStringProperty notesProperty() {
         return notes;
     }
 
@@ -64,8 +64,30 @@ public class Dream {
         return mood.get();
     }
 
-    public ReadOnlyStringProperty moodProperty() {
+    public SimpleStringProperty moodProperty() {
         return mood;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title.set(title);
+    }
+
+    public void setContent(String content) { this.content.set(content); }
+
+    public void setDate(String date)
+    {
+        this.date.set(date);
+    }
+
+    public void setNotes(String notes)
+    {
+        this.notes.set(notes);
+    }
+
+    public void setMood(String mood)
+    {
+        this.mood.set(mood);
     }
 
     @Override

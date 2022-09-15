@@ -69,17 +69,18 @@ public class DreamDAO {
         }
     }
 
-    public static int create(String title, String text, String notes, String mood) {
-        Date now = CRUDHelper.now();
-        int id = (int) CRUDHelper.create(TABLE_NAME,
+    public static int create(String title, String text, String notes, String mood, String date) {
+        //Date now = CRUDHelper.now();
+        int id = (int) CRUDHelper.create(
+                TABLE_NAME,
                 new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN},
-                new String[]{title, text, now.toString(), notes, mood},
+                new String[]{title, text, date, notes, mood},
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
 
         if (id == 0) {
             throw new IllegalStateException("Dream " + title + " could not have been created. No creation possible.");
         } else
-            DREAMS_MAP.put(id, new Dream(id, title, text, now.toString(), notes, mood));
+            DREAMS_MAP.put(id, new Dream(id, title, text, date, notes, mood));
 
         return id;
     }
@@ -88,12 +89,12 @@ public class DreamDAO {
         return Optional.ofNullable(DREAMS_MAP.get(id));
     }
 
-    public static void update(Dream dream) {
+    public static int update(Dream dream) {
         int rows = CRUDHelper.update(
                 TABLE_NAME,
-                new String[]{TITLE_COLUMN, TEXT_COLUMN, NOTES_COLUMN},
-                new String[]{dream.getTitle(), dream.getContent(), dream.getNotes()},
-                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR},
+                new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN},
+                new String[]{dream.getTitle(), dream.getContent(), dream.getDate(), dream.getNotes(), dream.getMood()},
+                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR},
                 ID_COLUMN,
                 Types.INTEGER,
                 dream.getId()
@@ -109,6 +110,7 @@ public class DreamDAO {
         }, () -> {
             throw new IllegalStateException("Dream " + dream.getId() + " did not exist in database. No update possible.");
         });
+        return dream.getId();
     }
 
     public static void delete(int id) {
@@ -122,10 +124,15 @@ public class DreamDAO {
 
     // return list of dreams
     public static ObservableList<Dream> getDreams() {
-        return FXCollections.unmodifiableObservableList(DREAMS_LIST);
+        return DREAMS_LIST;
     }
 
-    public static boolean dreamExistsIgnoreCase(String dreamTitle) {
+    /*
+    public static ObservableList<Dream> getDreams() { return FXCollections.unmodifiableObservableList(DREAMS_LIST); }
+    */
+
+
+    public static boolean dreamExistsIgnoreCase(String dreamTitle) {                //TODO Martin: Obsolet?
         return DREAMS_LIST.stream().anyMatch(dream -> dream.getTitle().equalsIgnoreCase(dreamTitle));
     }
 }
