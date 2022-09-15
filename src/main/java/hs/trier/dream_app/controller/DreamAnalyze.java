@@ -9,9 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.web.HTMLEditor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DreamAnalyze {
     @FXML
     private ListView<String> matchesListView;

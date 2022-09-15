@@ -6,7 +6,6 @@ import hs.trier.dream_app.model.Dream;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
@@ -44,7 +43,6 @@ public class Library {
         titleTableColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         // add columns to table
-        //noinspection unchecked
         dreamsTableView.getColumns().addAll(dateTableColumn, titleTableColumn);
 
         // populate tableView with dream items

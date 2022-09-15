@@ -1,15 +1,14 @@
 package hs.trier.dream_app.model;
 
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Dream {
-    private int id;
-    private SimpleStringProperty title;
-    private SimpleStringProperty content;
-    private SimpleStringProperty date;
-    private SimpleStringProperty notes;
-    private SimpleStringProperty mood;
+    private final int id;
+    private final SimpleStringProperty title;
+    private final SimpleStringProperty content;
+    private final SimpleStringProperty date;
+    private final SimpleStringProperty notes;
+    private final SimpleStringProperty mood;
 
     public Dream(int id, String title, String content, String date, String notes, String mood) {
         this.id = id;
@@ -20,10 +19,6 @@ public class Dream {
         this.mood = new SimpleStringProperty(mood);
     }
 
-    public static Dream copyOf(Dream src) {
-        return new Dream(-100, src.getTitle(), src.getContent(), src.getDate(), src.getNotes(), src.getMood());
-    }
-
     public int getId() {
         return id;
     }
@@ -32,40 +27,20 @@ public class Dream {
         return content.get();
     }
 
-    public SimpleStringProperty contentProperty() {
-        return content;
-    }
-
     public String getTitle() {
         return title.get();
-    }
-
-    public SimpleStringProperty titleProperty() {
-        return title;
     }
 
     public String getDate() {
         return date.get();
     }
 
-    public SimpleStringProperty dateProperty() {
-        return date;
-    }
-
     public String getNotes() {
         return notes.get();
     }
 
-    public SimpleStringProperty notesProperty() {
-        return notes;
-    }
-
     public String getMood() {
         return mood.get();
-    }
-
-    public SimpleStringProperty moodProperty() {
-        return mood;
     }
 
     public void setTitle(String title)

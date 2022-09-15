@@ -1,6 +1,5 @@
 package hs.trier.dream_app.model;
 
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -23,20 +22,12 @@ public class Symbol {
         return name.get();
     }
 
-    public ReadOnlyStringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
     }
 
     public String getDescription() {
         return description.get();
-    }
-
-    public ReadOnlyStringProperty descriptionProperty() {
-        return description;
     }
 
     public void setDescription(String description) {

@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class NewDream {
@@ -36,7 +35,7 @@ public class NewDream {
     private void initialize() {
 
         // set event handler
-        saveDreamButton.setOnAction(actionEvent -> saveDream(actionEvent));
+        saveDreamButton.setOnAction(this::saveDream);
 
         // create booleanBinding
         BooleanBinding dreamExistsIgnoreCaseBinding = Bindings.createBooleanBinding(
@@ -109,5 +108,4 @@ public class NewDream {
         notesTextArea.setText(editDream.getNotes());
         datePicker.setValue(Util.convertDate(editDream.getDate()));
     }
-
 }
