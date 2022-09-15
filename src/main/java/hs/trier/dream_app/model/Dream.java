@@ -20,6 +20,10 @@ public class Dream {
         this.mood = new SimpleStringProperty(mood);
     }
 
+    public static Dream copyOf(Dream src) {
+        return new Dream(-100, src.getTitle(), src.getContent(), src.getDate(), src.getNotes(), src.getMood());
+    }
+
     public int getId() {
         return id;
     }

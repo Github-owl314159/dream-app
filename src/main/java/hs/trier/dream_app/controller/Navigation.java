@@ -21,7 +21,8 @@ public class Navigation {
 
     @FXML
     private void onNewDreamButton() {
-        Util.getInstance().loadFXML("views/new-dream.fxml");
+        NewDream controller = (NewDream) Util.getInstance().loadFXML("views/new-dream.fxml");
+        controller.clear();
     }
 
     @FXML

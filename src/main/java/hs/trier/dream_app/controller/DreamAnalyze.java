@@ -27,21 +27,27 @@ public class DreamAnalyze {
     public void analyze(Dream selectedItem) {
         titleLabel.setText(selectedItem.getTitle());
 
+        // get content of dream
         String content = selectedItem.getContent();
+        // split content into words
         String[] tokens = content.split(" ");
 
         ObservableList<String> matches = FXCollections.observableArrayList();
         StringBuilder sb = new StringBuilder();
         for (String token : tokens) {
+            // found a match?
             if (SymbolDAO.symbolExistsIgnoreCase(token)) {
-                matches.add(token.toUpperCase());
+                // is found match NOT a duplicate?
+                if (!matches.contains(token.toUpperCase())) {
+                    matches.add(token.toUpperCase());
+                }
+                // inject some html for colorizing within the html editor
                 token = "<span style=\"color: red;\">" + token + "</span>";
             }
             sb.append(token).append(" ");
         }
         matchesListView.setItems(matches);
 
-        matches.forEach(System.out::println);
         contentHTMLEditor.setDisable(true);
         contentHTMLEditor.setHtmlText(sb.toString());
     }
