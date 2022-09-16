@@ -19,6 +19,7 @@ public class DreamAnalyze {
 
     @FXML
     private void initialize() {
+        contentHTMLEditor.setDisable(true);
     }
 
     public void analyze(Dream selectedItem) {
@@ -45,7 +46,6 @@ public class DreamAnalyze {
         }
         matchesListView.setItems(matches);
 
-        contentHTMLEditor.setDisable(true);
         contentHTMLEditor.setHtmlText(sb.toString());
     }
 }
