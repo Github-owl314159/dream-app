@@ -30,10 +30,8 @@ public class NewDream {
     private boolean editMode = false;
     private Dream editDream;
 
-
     @FXML
     private void initialize() {
-
         // set event handler
         saveDreamButton.setOnAction(this::saveDream);
 
@@ -47,7 +45,7 @@ public class NewDream {
         saveDreamButton.disableProperty().bind(
                 Bindings.createBooleanBinding(
                         () -> (titleTextField.getText().trim().isEmpty() || contentTextArea.getText().trim().isEmpty()),
-                             //   || dreamExistsIgnoreCaseBinding.get(),
+                        //   || dreamExistsIgnoreCaseBinding.get(),
                         titleTextField.textProperty(),
                         contentTextArea.textProperty()
                 ));

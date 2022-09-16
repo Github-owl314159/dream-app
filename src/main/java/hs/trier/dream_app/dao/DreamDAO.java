@@ -20,7 +20,7 @@ public class DreamDAO {
     private static final String MOOD_COLUMN = "mood";
     private static final ObservableList<Dream> DREAMS_LIST = FXCollections.observableArrayList();
 
-    static {
+    public static void initialize() {
         updateDreamsFromDB();
     }
 

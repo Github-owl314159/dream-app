@@ -18,11 +18,11 @@ public class SymbolDAO {
     private static final String ID_COLUMN = "id";
     private static final String NAME_COLUMN = "name";
     private static final String DESCRIPTION_COLUMN = "description";
-    private static final ObservableMap<Integer, Symbol> SYMBOLS_MAP;
-    private static final ObservableList<Symbol> SYMBOLS_LIST;
+    private static ObservableMap<Integer, Symbol> SYMBOLS_MAP;
+    private static ObservableList<Symbol> SYMBOLS_LIST;
 
 
-    static {
+    public static void initialize() {
         SYMBOLS_MAP = FXCollections.observableHashMap();
         updateSymbolsFromDB();
         SYMBOLS_LIST = FXCollections.observableArrayList(SYMBOLS_MAP.values());

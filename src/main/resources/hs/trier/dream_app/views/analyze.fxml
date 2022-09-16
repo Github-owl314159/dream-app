@@ -47,7 +47,7 @@
                   <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
                         <HBox alignment="TOP_CENTER" spacing="10.0">
                             <children>
-                                <Button fx:id="saveDreamButton" mnemonicParsing="false" text="Save">
+                                <Button fx:id="getDeepDream" mnemonicParsing="false" text="Get DeepDream Image">
                                     <font>
                                         <Font name="Segoe UI Bold" size="12.0" />
                                     </font>

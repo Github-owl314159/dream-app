@@ -1,5 +1,8 @@
 package hs.trier.dream_app;
 
+import hs.trier.dream_app.dao.DeepDreamDAO;
+import hs.trier.dream_app.dao.DreamDAO;
+import hs.trier.dream_app.dao.SymbolDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +17,10 @@ public class DreamApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        // phase: initialize
+        SymbolDAO.initialize();
+        DreamDAO.initialize();
+
         Scene scene = new Scene(FXMLLoader.load(Util.getAbsoluteURL("views/navigation.fxml")));
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/hs/trier/dream_app/styles/theme.css")).toExternalForm());
 
