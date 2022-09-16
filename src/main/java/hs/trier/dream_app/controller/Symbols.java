@@ -39,7 +39,6 @@ public class Symbols {
         nameTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         // add columns to table
-        //noinspection unchecked
         symbolsTableView.getColumns().addAll(nameTableColumn);
 
         // sorting

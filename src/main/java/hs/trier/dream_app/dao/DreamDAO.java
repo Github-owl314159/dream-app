@@ -67,10 +67,6 @@ public class DreamDAO {
         return id;
     }
 
-//    public static Optional<Dream> getDream(int id) {
-//        return Optional.ofNullable(DREAMS_LIST.get(id));
-//    }
-
     public static int update(Dream dream) {
         int rows = CRUDHelper.update(
                 TABLE_NAME,
@@ -102,7 +98,7 @@ public class DreamDAO {
         return DREAMS_LIST;
     }
 
-    public static boolean dreamExistsIgnoreCase(String dreamTitle) {                //TODO Martin: Obsolet?
+    public static boolean dreamExistsIgnoreCase(String dreamTitle) {
         return DREAMS_LIST.stream().anyMatch(dream -> dream.getTitle().equalsIgnoreCase(dreamTitle));
     }
 }
