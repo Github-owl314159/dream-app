@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,5 +109,31 @@ public class SymbolDAO {
     // return list of symbols
     public static ObservableList<Symbol> getSymbols() {
         return SYMBOLS_LIST;
+    }
+
+    public static List<Symbol> searchSymbols(String word) {
+
+        String query = "SELECT * FROM " + TABLE_NAME + "WHERE " + NAME_COLUMN + "LIKE " + word +";";
+        List<Symbol> matches = new ArrayList<>();
+
+        try (Connection connection = Database.connect()) {
+            assert connection != null;
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                matches.add(new Symbol(
+                        rs.getInt(ID_COLUMN),
+                        rs.getString(NAME_COLUMN),
+                        rs.getString(DESCRIPTION_COLUMN)
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": Could not load Symbols from Database."
+            );
+        }
+        return matches;
     }
 }

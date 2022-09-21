@@ -147,7 +147,7 @@ public class Library {
 
     private void searchDreamSymbols(ActionEvent actionEvent) {
         Dream selectedItem = dreamsTableView.getSelectionModel().getSelectedItem();
-        DreamAnalyze controller = (DreamAnalyze) Util.getInstance().loadFXML("views/analyze.fxml");
+        AnalyzeDream controller = (AnalyzeDream) Util.getInstance().loadFXML("views/analyze.fxml");
 
         controller.analyze(selectedItem);
         actionEvent.consume();
