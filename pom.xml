@@ -25,6 +25,7 @@
             <artifactId>stanford-corenlp</artifactId>
             <version>4.4.0</version>
             <classifier>models</classifier>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

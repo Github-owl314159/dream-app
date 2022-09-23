@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +25,17 @@ public class AnalyzeDream
     @FXML
     private Label titleLabel;
     @FXML
-    private HTMLEditor contentHTMLEditor;
-    @FXML
     private Button getDeepDream;
     @FXML
     private TextArea descriptionTextArea;
+    @FXML
+    private WebView dreamContent = new WebView();
+   // WebEngine webEngine = webView.getEngine();
 
     private ObservableList<Symbol> matches;
 
     @FXML
     private void initialize() {
-        contentHTMLEditor.setDisable(true);
         // init list for found matches
         matches = FXCollections.observableArrayList();
 
@@ -77,25 +79,29 @@ public class AnalyzeDream
         StringBuilder sb = new StringBuilder();
         Boolean foundsomething = false;
         for ( String token : tokens) {
+            foundsomething = false;
             for (AnalyzedToken analyzedToken : filteredTokens) {
+
                 if (token.toLowerCase().equals(analyzedToken.getToken())) {
-                    List<Symbol> temp = SymbolDAO.searchSymbols(analyzedToken.getLemma());
-                    for (Symbol symbol : temp) {
-                        matches.add(symbol);
+
+                    List<Symbol> foundSymbols = SymbolDAO.searchSymbols(analyzedToken.getLemma());
+                    if (!foundSymbols.isEmpty()) {
                         foundsomething = true;
+                        sb.append("<span style=\"color: red;\">" + token + "</span>");
+                        for (Symbol symbol : foundSymbols) {
+                            matches.add(symbol);
+                        }
                     }
-                    sb.append("<span style=\"color: red;\">" + token + "</span>");
                 }
             }
-            if (foundsomething) {
+            if (!foundsomething) {
                 sb.append(token);
-                foundsomething = false;
             }
         }
 
         matchesTableView.setItems(matches);
-
-        contentHTMLEditor.setHtmlText(sb.toString());
+        dreamContent.getEngine().loadContent(sb.toString(),"text/html");
+        System.out.println(sb.toString());
     }
 
     private void getDeepDream(ActionEvent actionEvent) {

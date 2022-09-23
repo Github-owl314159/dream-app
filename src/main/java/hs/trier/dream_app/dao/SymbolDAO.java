@@ -113,27 +113,12 @@ public class SymbolDAO {
 
     public static List<Symbol> searchSymbols(String word) {
 
-        String query = "SELECT * FROM " + TABLE_NAME + "WHERE " + NAME_COLUMN + "LIKE " + word +";";
-        List<Symbol> matches = new ArrayList<>();
-
-        try (Connection connection = Database.connect()) {
-            assert connection != null;
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                matches.add(new Symbol(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(NAME_COLUMN),
-                        rs.getString(DESCRIPTION_COLUMN)
-                ));
+        List<Symbol> foundSymbols = new ArrayList<>();
+        for (Symbol symbol : SYMBOLS_LIST) {
+            if (symbol.getName().toLowerCase().contains(word)) {
+                foundSymbols.add(symbol);
             }
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": Could not load Symbols from Database."
-            );
         }
-        return matches;
+        return foundSymbols;
     }
 }

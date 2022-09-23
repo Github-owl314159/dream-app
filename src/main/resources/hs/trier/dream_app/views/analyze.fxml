@@ -3,13 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.web.HTMLEditor?>
+<?import javafx.scene.web.WebView?>
 
 <VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.AnalyzeDream">
     <children>
@@ -18,9 +17,9 @@
                 <Font name="Segoe Print" size="16.0" />
             </font>
         </Label>
-        <HBox spacing="50.0">
+        <HBox spacing="20.0">
             <children>
-                <VBox spacing="50.0" HBox.hgrow="SOMETIMES">
+                <VBox spacing="20.0" HBox.hgrow="SOMETIMES">
                     <children>
                         <HBox spacing="15.0" styleClass="bg-dark">
                             <Label text="Dream Title:">
@@ -30,10 +29,10 @@
                             </Label>
                      <Label fx:id="titleLabel" text="Label" />
                         </HBox>
-                  <HTMLEditor fx:id="contentHTMLEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="200.0" prefWidth="506.0" />
+                  <WebView fx:id="dreamContent" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" />
                     </children>
                 </VBox>
-                <VBox spacing="50.0">
+                <VBox spacing="20.0">
                     <children>
                         <HBox alignment="CENTER" fillHeight="false" spacing="15.0" styleClass="bg-dark">
                             <children>
@@ -44,13 +43,8 @@
                                 </Label>
                             </children>
                         </HBox>
-                  <TableView fx:id="matchesTableView" prefHeight="200.0" prefWidth="200.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
-                  </TableView>
-                  <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
+                  <TableView fx:id="matchesTableView" prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
                         <HBox alignment="TOP_CENTER" spacing="10.0">
                             <children>
                                 <Button fx:id="getDeepDream" mnemonicParsing="false" text="Get DeepDream Image">
@@ -63,9 +57,12 @@
                     </children>
                 </VBox>
             </children>
-            <padding>
-                <Insets left="70.0" right="70.0" />
-            </padding>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
         </HBox>
     </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </VBox>
