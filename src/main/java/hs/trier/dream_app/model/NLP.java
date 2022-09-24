@@ -2,7 +2,7 @@ package hs.trier.dream_app.model;
 
 import java.util.*;
 import java.util.regex.Pattern;
-//import edu.stanford.nlp.simple.*;
+import edu.stanford.nlp.simple.*;
 
 public class NLP
 {
@@ -11,7 +11,6 @@ public class NLP
     public static String[] tokenize(String input) {
 
         //Split text into tokens using various delimiters AND keeping those (for rebuilding text for webview later on)
-
         return input.split("((?<= )|(?= ))|" +
                 "((?<=,)|(?=,))|" +
                 "((?<=" + Pattern.quote(".") + ")|(?=" + Pattern.quote(".") + "))|" +
@@ -24,16 +23,17 @@ public class NLP
                 "((?<=" + Pattern.quote("-") + ")|(?=" + Pattern.quote("-") + "))" +
                 "((?<=" + Pattern.quote("[") + ")|(?=" + Pattern.quote("[") + "))" +
                 "((?<=" + Pattern.quote("]") + ")|(?=" + Pattern.quote("]") + "))|" +
+                "((?<=" + Pattern.quote("<") + ")|(?=" + Pattern.quote("<") + "))|" +
+                "((?<=" + Pattern.quote(">") + ")|(?=" + Pattern.quote(">") + "))|" +
                 "((?<=_)|(?=_))|" +
                 "((?<=')|(?='))"
         );
     }
 
 
-    public static List<String> filter(List<String> input)
+    public static List<String> filter(String[] input)
     {
         // Filter raw tokens: delete stopwords and duplicates
-
         Set<String> tokenSet = new LinkedHashSet<>();
         for (String token : input ) {
             if ( !( token.equals(" ") |
@@ -46,10 +46,13 @@ public class NLP
                     token.equals(")") |
                     token.equals("[") |
                     token.equals("]") |
+                    token.equals("<") |
+                    token.equals(">") |
                     token.equals("_") |
                     token.equals("-") |
                     token.equals("'") ) ) {
-                tokenSet.add(token);
+                tokenSet.add(token.toLowerCase());
+                System.out.println("Added token to filtered token list: " + token);             //TODO
             }
         }
 
@@ -64,16 +67,14 @@ public class NLP
     public static List<AnalyzedToken> lemmatize(List<String> input)
     {
         // Lemmatize the input tokens, create an AnalyzedToken-Object and set original token and lemma
-
         List<AnalyzedToken> output = new ArrayList<>();
         for (String token : input)
         {
             AnalyzedToken analyzedToken = new AnalyzedToken(token);
-
-            analyzedToken.setLemma(token);
-//            analyzedToken.setLemma(new Sentence(token).lemma(0));
-
+//            analyzedToken.setLemma(token);
+            analyzedToken.setLemma(new Sentence(token).lemma(0));
             output.add(analyzedToken);
+            System.out.println("Added lemma: " + analyzedToken.getLemma());             //TODO
         }
         return output;
     }
