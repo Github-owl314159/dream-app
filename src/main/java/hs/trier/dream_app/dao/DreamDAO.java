@@ -1,6 +1,7 @@
 package hs.trier.dream_app.dao;
 
 import hs.trier.dream_app.Database;
+import hs.trier.dream_app.Util;
 import hs.trier.dream_app.model.Dream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,11 +37,11 @@ public class DreamDAO {
             while (rs.next()) {
                 DREAMS_LIST.add(new Dream(
                         rs.getInt(ID_COLUMN),
-                        rs.getString(TITLE_COLUMN),
-                        rs.getString(TEXT_COLUMN),
-                        rs.getString(DATE_COLUMN),
-                        rs.getString(NOTES_COLUMN),
-                        rs.getString(MOOD_COLUMN)
+                        Util.decode(rs.getString(TITLE_COLUMN)),
+                        Util.decode(rs.getString(TEXT_COLUMN)),
+                        Util.decode(rs.getString(DATE_COLUMN)),
+                        Util.decode(rs.getString(NOTES_COLUMN)),
+                        Util.decode(rs.getString(MOOD_COLUMN))
                 ));
             }
         } catch (SQLException e) {
@@ -56,7 +57,7 @@ public class DreamDAO {
         int id = (int) CRUDHelper.create(
                 TABLE_NAME,
                 new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN},
-                new String[]{title, text, date, notes, mood},
+                new String[]{Util.encode(title), Util.encode(text), Util.encode(date), Util.encode(notes), Util.encode(mood)},
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
 
         if (id == 0) {
@@ -71,7 +72,7 @@ public class DreamDAO {
         int rows = CRUDHelper.update(
                 TABLE_NAME,
                 new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN},
-                new String[]{dream.getTitle(), dream.getContent(), dream.getDate(), dream.getNotes(), dream.getMood()},
+                new String[]{Util.encode(dream.getTitle()), Util.encode(dream.getContent()), Util.encode(dream.getDate()), Util.encode(dream.getNotes()), Util.encode(dream.getMood())},
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR},
                 ID_COLUMN,
                 Types.INTEGER,

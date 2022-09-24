@@ -11,13 +11,13 @@ public class NLP
     public static String[] tokenize(String input) {
 
         //Split text into tokens using various delimiters AND keeping those (for rebuilding text for webview later on)
-        return input.split("((?<= )|(?= ))|" +
-                "((?<=,)|(?=,))|" +
+        return input.split("((?<=" + Pattern.quote(" ") + ")|(?=" + Pattern.quote(" ") + "))|" +
+                "((?<=" + Pattern.quote(",") + ")|(?=" + Pattern.quote(",") + "))|" +
                 "((?<=" + Pattern.quote(".") + ")|(?=" + Pattern.quote(".") + "))|" +
-                "((?<=:)|(?=:))|" +
-                "((?<=;)|(?=;))" +
+                "((?<=" + Pattern.quote(":") + ")|(?=" + Pattern.quote(":") + "))|" +
+                "((?<=" + Pattern.quote(";") + ")|(?=" + Pattern.quote(";") + "))|" +
                 "((?<=" + Pattern.quote("?") + ")|(?=" + Pattern.quote("?") + "))|" +
-                "((?<=!)|(?=!))" +
+                "((?<=" + Pattern.quote("!") + ")|(?=" + Pattern.quote("!") + "))|" +
                 "((?<=" + Pattern.quote("(") + ")|(?=" + Pattern.quote("(") + "))" +
                 "((?<=" + Pattern.quote(")") + ")|(?=" + Pattern.quote(")") + "))" +
                 "((?<=" + Pattern.quote("-") + ")|(?=" + Pattern.quote("-") + "))" +
@@ -25,8 +25,8 @@ public class NLP
                 "((?<=" + Pattern.quote("]") + ")|(?=" + Pattern.quote("]") + "))|" +
                 "((?<=" + Pattern.quote("<") + ")|(?=" + Pattern.quote("<") + "))|" +
                 "((?<=" + Pattern.quote(">") + ")|(?=" + Pattern.quote(">") + "))|" +
-                "((?<=_)|(?=_))|" +
-                "((?<=')|(?='))"
+                "((?<=" + Pattern.quote("_") + ")|(?=" + Pattern.quote("_") + "))|" +
+                "((?<=" + Pattern.quote("'") + ")|(?=" + Pattern.quote("'") + "))"
         );
     }
 
@@ -34,9 +34,10 @@ public class NLP
     public static List<String> filter(String[] input)
     {
         // Filter raw tokens: delete stopwords and duplicates
-        Set<String> tokenSet = new LinkedHashSet<>();
+        Set<String> tokenSet = new LinkedHashSet<String>();
         for (String token : input ) {
             if ( !( token.equals(" ") |
+                    token.equals(".") |
                     token.equals(",") |
                     token.equals(":") |
                     token.equals(";") |
@@ -52,14 +53,16 @@ public class NLP
                     token.equals("-") |
                     token.equals("'") ) ) {
                 tokenSet.add(token.toLowerCase());
-                System.out.println("Added token to filtered token list: " + token);             //TODO
+                //System.out.println("Added token to filtered token list: " + token);             //TODO
             }
         }
 
-        List<String> output = new ArrayList<>(tokenSet);
+        List<String> output = new ArrayList<>();
+        output.addAll(tokenSet);
         for (String stopword : stopWords) {
             output.removeIf(string -> string.toLowerCase().equals(stopword));
         }
+        //System.out.println(output.toString());             //TODO
         return output;
     }
 
@@ -74,7 +77,7 @@ public class NLP
 //            analyzedToken.setLemma(token);
             analyzedToken.setLemma(new Sentence(token).lemma(0));
             output.add(analyzedToken);
-            System.out.println("Added lemma: " + analyzedToken.getLemma());             //TODO
+            //System.out.println("Added lemma: " + analyzedToken.getLemma());             //TODO
         }
         return output;
     }

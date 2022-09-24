@@ -76,8 +76,7 @@ public class AnalyzeDream {
                         sb.append("<span style=\"color: red;\">" + token + "</span>");
                         for (Symbol symbol : foundSymbols) {
                             matchesSet.add(symbol);
-                            System.out.println("Added match: " + symbol.getName());             //TODO
-
+                            //System.out.println("Added match: " + symbol.getName());             //TODO
                         }
                     }
                 }
