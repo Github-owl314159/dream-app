@@ -1,14 +1,16 @@
 package hs.trier.dream_app.controller;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import hs.trier.dream_app.Util;
+import hs.trier.dream_app.api.HttpHandler;
 import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.AnalyzedToken;
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.model.NLP;
 import hs.trier.dream_app.model.Symbol;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,10 +19,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AnalyzeDream {
     public ListView<Symbol> matchesListView;
@@ -62,6 +62,10 @@ public class AnalyzeDream {
         // callback: populate preview fields whenever selected item changes
         matchesListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, ov, nv) -> descriptionTextArea.setText(nv.getDescription()));
+
+        // disable button if no match is available
+        getDeepDream.disableProperty().bind(Bindings.isEmpty(matches));
+
     }
 
     public void analyze(Dream selectedItem) {
@@ -88,7 +92,7 @@ public class AnalyzeDream {
                     List<Symbol> foundSymbols = SymbolDAO.searchSymbols(analyzedToken.getLemma());
                     if (!foundSymbols.isEmpty()) {
                         match = true;
-                        sb.append("<span style=\"color: red;\">").append(token).append("</span>");
+                        sb.append("<span style=\"color: green;\">").append(token).append("</span>");
                         matches.addAll(foundSymbols);
                     }
                 }
@@ -110,19 +114,40 @@ public class AnalyzeDream {
         deepImageView.setImage(image);
     }
 
-    private void getDeepDream(ActionEvent actionEvent) {
+    @FXML
+    private void cancel(ActionEvent actionEvent) {
         try {
-            Image image = SwingFXUtils.toFXImage(ImageIO.read(new URL("https://replicate.com/api/models/pixray/text2image/files/d49b56e4-489c-49b8-8de8-29655076a177/tempfile.png")), null);
-            deepImageView.setImage(image);
-        } catch (IOException e) {
+            HttpHandler.cancel();
+        } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
+
+        actionEvent.consume();
+    }
+
+    private void getDeepDream(ActionEvent actionEvent) {
+        // create prompt for API
+        StringBuilder prompt = new StringBuilder();
+        ListIterator<Symbol> iterator = matches.listIterator();
+        while (iterator.hasNext()) {
+            Symbol symbol = iterator.next();
+            prompt.append(symbol.getName());
+            if (iterator.nextIndex() != matches.size())
+                prompt.append(" | ");
+        }
+
+        // start API request
+        try {
+            HttpHandler.start(prompt.toString());
+        } catch (UnirestException e) {
+            throw new RuntimeException(e);
+        }
+
 //        try {
-//            DeepImages.routing("Alice");
-//            DeepImages.routing("Water");
-//        } catch (UnirestException e) {
+//            Image image = SwingFXUtils.toFXImage(ImageIO.read(new URL("https://replicate.com/api/models/pixray/text2image/files/d49b56e4-489c-49b8-8de8-29655076a177/tempfile.png")), null);
+//            deepImageView.setImage(image);
+//        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-//        deepImageView.setImage(image);
     }
 }

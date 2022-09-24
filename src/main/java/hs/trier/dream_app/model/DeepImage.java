@@ -1,7 +1,5 @@
 package hs.trier.dream_app.model;
 
-import hs.trier.dream_app.api.Router;
-import hs.trier.dream_app.controller.AnalyzeDream;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;

@@ -45,8 +45,8 @@
 
 .button:default {
     -fx-background-color: #3A465A;
-    -fx-text-fill: green;
-    -fx-border-color: green;
+    -fx-text-fill: lightGreen;
+    -fx-border-color: lightGreen;
 }
 
 DialogPane {

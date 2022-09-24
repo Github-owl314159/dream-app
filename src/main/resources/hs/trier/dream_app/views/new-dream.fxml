@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.NewDream">
    <children>
@@ -19,9 +18,9 @@
                <children>
                   <HBox spacing="15.0" styleClass="bg-dark">
                      <Label text="Dream Title:" />
-                     <TextField fx:id="titleTextField" HBox.hgrow="ALWAYS" />
+                     <TextField fx:id="titleTextField" promptText="Give your dream a fitting title." HBox.hgrow="ALWAYS" />
                   </HBox>
-                  <TextArea fx:id="contentTextArea" prefHeight="450.0" prefWidth="500.0" promptText="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. A iaculis at erat pellentesque adipiscing commodo elit at imperdiet. Eu augue ut lectus arcu. Ultricies integer quis auctor elit sed. At in tellus integer feugiat scelerisque. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Fringilla urna porttitor rhoncus dolor purus non enim praesent elementum. Auctor neque vitae tempus quam. Et pharetra pharetra massa massa. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. In cursus turpis massa tincidunt dui ut ornare lectus sit. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Netus et malesuada fames ac turpis egestas maecenas pharetra. Consequat ac felis donec et odio pellentesque diam volutpat." wrapText="true" VBox.vgrow="ALWAYS" />
+                  <TextArea fx:id="contentTextArea" prefHeight="450.0" prefWidth="500.0" promptText="Today I dreamed about ..." wrapText="true" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox spacing="20.0">
@@ -29,7 +28,7 @@
                   <HBox alignment="CENTER" fillHeight="false" spacing="15.0" styleClass="bg-dark">
                      <children>
                         <Label text="Date:" />
-                        <DatePicker fx:id="datePicker" />
+                        <DatePicker fx:id="datePicker" editable="false" promptText="Select a date -&gt;" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" fillHeight="false" spacing="15.0" styleClass="bg-dark">
@@ -38,7 +37,7 @@
                         <TextField fx:id="moodTextField" promptText="How do you feel right now?" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="notesTextArea" prefHeight="192.0" prefWidth="155.0" promptText="You can put some notes here..." wrapText="true" />
+                  <TextArea fx:id="notesTextArea" prefHeight="192.0" prefWidth="155.0" promptText="You can put some notes here ..." wrapText="true" />
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
                         <Button fx:id="saveDreamButton" mnemonicParsing="false" text="Save" />
