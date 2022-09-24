@@ -49,7 +49,7 @@
                         <HBox alignment="TOP_CENTER" spacing="10.0">
                             <children>
                         <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-                                <Button fx:id="getDeepDream" mnemonicParsing="false" text="Get DeepDream Image">
+                                <Button fx:id="getDeepDreamButton" mnemonicParsing="false" text="Get DeepDream Image">
                                     <font>
                                         <Font name="Segoe UI Bold" size="12.0" />
                                     </font>

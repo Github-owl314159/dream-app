@@ -13,7 +13,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,22 +22,23 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class AnalyzeDream {
-    public ListView<Symbol> matchesListView;
+    @FXML
+    private ListView<Symbol> matchesListView;
     @FXML
     private ImageView deepImageView;
     @FXML
     private Label titleLabel;
     @FXML
-    private Button getDeepDream;
+    private Button getDeepDreamButton;
     @FXML
     private TextArea descriptionTextArea;
     @FXML
     private WebView dreamContent = new WebView();
-
     private ObservableList<Symbol> matches;
 
     @FXML
     private void initialize() {
+
         // display name of symbol in listView
         matchesListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -57,15 +57,14 @@ public class AnalyzeDream {
         matches = FXCollections.observableArrayList();
 
         // set event listener
-        getDeepDream.setOnAction(this::getDeepDream);
+        getDeepDreamButton.setOnAction(this::getDeepDream);
 
         // callback: populate preview fields whenever selected item changes
         matchesListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, ov, nv) -> descriptionTextArea.setText(nv.getDescription()));
 
         // disable button if no match is available
-        getDeepDream.disableProperty().bind(Bindings.isEmpty(matches));
-
+        getDeepDreamButton.disableProperty().bind(Bindings.isEmpty(matches));
     }
 
     public void analyze(Dream selectedItem) {
@@ -82,7 +81,7 @@ public class AnalyzeDream {
         List<AnalyzedToken> analyzedTokens = NLP.lemmatize(NLP.filter(tokens));
 
         StringBuilder sb = new StringBuilder();
-        boolean match = false;
+        boolean match;
         for (String token : tokens) {
             match = false;
             for (AnalyzedToken analyzedToken : analyzedTokens) {
@@ -106,8 +105,7 @@ public class AnalyzeDream {
     }
 
     public static AnalyzeDream getController() {
-        FXMLLoader loader = new FXMLLoader(Util.getAbsoluteURL("views/analyze.fxml"));
-        return loader.getController();
+        return (AnalyzeDream) Util.getInstance().loadFXML("views/analyze.fxml");
     }
 
     public void setDeepImageView(Image image) {
@@ -142,12 +140,5 @@ public class AnalyzeDream {
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
-
-//        try {
-//            Image image = SwingFXUtils.toFXImage(ImageIO.read(new URL("https://replicate.com/api/models/pixray/text2image/files/d49b56e4-489c-49b8-8de8-29655076a177/tempfile.png")), null);
-//            deepImageView.setImage(image);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 }

@@ -17,10 +17,11 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 public class HttpHandler {
 
-    private static boolean ACTIVE_SESSION = false;
+    public static boolean ACTIVE_SESSION = false;
     private static String SESSION_ID;
     private static final String URL = "https://api.replicate.com/v1/predictions";
     private static final String TOKEN_KEY = "";
@@ -78,11 +79,15 @@ public class HttpHandler {
                                     case "processing" -> {
                                         System.out.println("Replicate.com is processing ...");
                                         JSONArray output = jsonBody.getJSONArray("output");
-                                        String urlString = output.getString(output.length() - 1);
+                                        String urlString = null;
+                                        if(output.length() != 0)
+                                            urlString = output.getString(output.length() - 1);
+                                        System.out.println("urlString = " + urlString);
                                         Image image;
                                         try {
-                                            image = SwingFXUtils.toFXImage(ImageIO.read(new URL(urlString)), null);
+                                            image = SwingFXUtils.toFXImage(ImageIO.read(new URL(Objects.requireNonNull(urlString))), null);
                                         } catch (IOException e) {
+                                            e.printStackTrace();
                                             throw new RuntimeException(e);
                                         }
                                         AnalyzeDream.getController().setDeepImageView(image);
@@ -90,14 +95,16 @@ public class HttpHandler {
                                     case "succeeded" -> {
                                         System.out.println("Replicate.com has succeeded!");
                                         JSONArray output = jsonBody.getJSONArray("output");
-                                        String urlString = output.getString(output.length() - 1);
+                                        String urlString = null;
+                                        if(output.length() != 0)
+                                            urlString = output.getString(output.length() - 1);
                                         Image image;
                                         try {
-                                            image = SwingFXUtils.toFXImage(ImageIO.read(new URL(urlString)), null);
+                                            image = SwingFXUtils.toFXImage(ImageIO.read(new URL(Objects.requireNonNull(urlString))), null);
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
                                         }
-//                                        AnalyzeDream.getController().setDeepImageView(image);
+                                        AnalyzeDream.getController().setDeepImageView(image);
                                         cancel();
                                         ACTIVE_SESSION = false;
                                     }
@@ -128,7 +135,7 @@ public class HttpHandler {
             service.setPeriod(Duration.seconds(15));
             service.setDelay(Duration.ZERO);
             service.setRestartOnFailure(true);
-            service.setMaximumFailureCount(100);
+            service.setMaximumFailureCount(4);
             service.start();
         } else {
             ACTIVE_SESSION = false;
@@ -146,3 +153,5 @@ public class HttpHandler {
         }
     }
 }
+
+
