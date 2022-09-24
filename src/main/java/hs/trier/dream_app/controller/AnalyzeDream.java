@@ -46,7 +46,7 @@ public class AnalyzeDream {
         matchesListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, ov, nv) -> descriptionTextArea.setText(nv.getDescription()));
 
-        // disable button if no match is available
+        // disable button if no match is available      //TODO Martin: Würde ich rausnehmen, selbst bei keinen matches sollte der User die Option auf ein schönes Bild haben ;)
         //getDeepDreamButton.disableProperty().bind(Bindings.isEmpty(matchesList));
     }
 
@@ -73,7 +73,7 @@ public class AnalyzeDream {
                     List<Symbol> foundSymbols = SymbolDAO.searchSymbols(analyzedToken.getLemma());
                     if (!foundSymbols.isEmpty()) {
                         foundsomething = true;
-                        sb.append("<span style=\"color: red;\">" + token + "</span>");
+                        sb.append("<span style=\"color: #815ADD;\"><b>" + token + "</b></span>");
                         for (Symbol symbol : foundSymbols) {
                             matchesSet.add(symbol);
                             //System.out.println("Added match: " + symbol.getName());             //TODO
@@ -91,7 +91,12 @@ public class AnalyzeDream {
         for (Object symbol : matchesSet) {
             matchesList.add((Symbol) symbol);
         }
+
+        // sort list and select first item
         matchesListView.setItems(matchesList.sorted());
+        if (!matchesListView.getItems().isEmpty()) {
+            matchesListView.getSelectionModel().select(0);
+        }
 
         // Load rebuilt string into WebView
         dreamContent.getEngine().loadContent(sb.toString(),"text/html");
