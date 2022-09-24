@@ -1,6 +1,7 @@
 package hs.trier.dream_app.model;
 
-import hs.trier.dream_app.api.DeepImages;
+import hs.trier.dream_app.api.Router;
+import hs.trier.dream_app.controller.AnalyzeDream;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
@@ -20,7 +21,7 @@ public class DeepImage {
     }
 
     public static void loadNewDeepImage() {
-        DeepImages.getImage().ifPresent(DeepImage::updateDeepImage);
+//        AnalyzeDream.getImage().ifPresent(DeepImage::updateDeepImage);
     }
 
     private static void updateDeepImage(BufferedImage image) {

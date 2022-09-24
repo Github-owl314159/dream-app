@@ -115,7 +115,7 @@ public class SymbolDAO {
 
         List<Symbol> foundSymbols = new ArrayList<>();
         for (Symbol symbol : SYMBOLS_LIST) {
-            if (symbol.getName().toLowerCase().contains(word)) {
+            if (symbol.getName().toLowerCase().contains(word.toLowerCase())) {
                 foundSymbols.add(symbol);
             }
         }
