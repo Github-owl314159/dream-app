@@ -136,7 +136,7 @@ public class AnalyzeDream {
 
         // start API request
         try {
-            HttpHandler.start(prompt.toString());
+            HttpHandler.connectWithAPI(prompt.toString());
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
