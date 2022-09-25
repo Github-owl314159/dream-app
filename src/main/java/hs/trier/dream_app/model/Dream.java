@@ -10,6 +10,8 @@ public class Dream {
     private final SimpleStringProperty notes;
     private final SimpleStringProperty mood;
 
+    private byte[] thumbnail = null;
+
     public Dream(int id, String title, String content, String date, String notes, String mood) {
         this.id = id;
         this.title = new SimpleStringProperty(title);
@@ -75,5 +77,13 @@ public class Dream {
                 ", notes=" + notes +
                 ", mood=" + mood +
                 '}';
+    }
+
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public byte[] getThumbnail() {
+        return thumbnail;
     }
 }

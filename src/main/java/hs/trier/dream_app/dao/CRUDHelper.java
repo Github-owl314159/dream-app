@@ -148,7 +148,7 @@ public class CRUDHelper {
                 queryBuilder.append(value);
                 queryBuilder.append("'");
             }
-            case Types.INTEGER -> queryBuilder.append(value);
+            case Types.INTEGER, Types.BLOB -> queryBuilder.append(value);
             default ->
                     throw new IllegalArgumentException("Index type " + type + " from sql.Types is not yet supported.");
         }

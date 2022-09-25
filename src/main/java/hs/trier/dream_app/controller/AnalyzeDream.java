@@ -3,19 +3,30 @@ package hs.trier.dream_app.controller;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import hs.trier.dream_app.Util;
 import hs.trier.dream_app.api.HttpHandler;
+import hs.trier.dream_app.dao.DreamDAO;
 import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.AnalyzedToken;
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.model.NLP;
 import hs.trier.dream_app.model.Symbol;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.List;
@@ -34,7 +45,7 @@ public class AnalyzeDream {
     @FXML
     private WebView dreamContent = new WebView();
 
-    private ObservableList<Symbol> matchesList;
+    private Dream currentDream;
 
     @FXML
     private void initialize() {
@@ -51,6 +62,7 @@ public class AnalyzeDream {
     }
 
     public void analyze(Dream selectedItem) {
+        currentDream = selectedItem;
 
         //merge dream title and content in string to analyze, change linebreaks to HTML
         String stringToAnalyze = "Title: " + selectedItem.getTitle() + "<br><br>";
@@ -66,7 +78,7 @@ public class AnalyzeDream {
         StringBuilder sb = new StringBuilder();
         Set<Symbol> matchesSet = new HashSet<>();
         Boolean foundsomething;
-        for ( String token : tokens) {
+        for (String token : tokens) {
             foundsomething = false;
             for (AnalyzedToken analyzedToken : filteredTokens) {
                 if (token.toLowerCase().equals(analyzedToken.getToken())) {
@@ -87,7 +99,7 @@ public class AnalyzeDream {
         }
 
         // Convert Set to Observable List and populate Listview
-        matchesList = FXCollections.observableArrayList(new ArrayList<>());
+        ObservableList<Symbol> matchesList = FXCollections.observableArrayList(new ArrayList<>());
         for (Object symbol : matchesSet) {
             matchesList.add((Symbol) symbol);
         }
@@ -99,7 +111,7 @@ public class AnalyzeDream {
         }
 
         // Load rebuilt string into WebView
-        dreamContent.getEngine().loadContent(sb.toString(),"text/html");
+        dreamContent.getEngine().loadContent(sb.toString(), "text/html");
     }
 
     public static AnalyzeDream getController() {
@@ -122,15 +134,27 @@ public class AnalyzeDream {
     }
 
     private void getDeepDream(ActionEvent actionEvent) {
+//        try {
+//            File file = new File("downloaded.png");
+//            BufferedImage image = ImageIO.read(new URL("https://replicate.com/api/models/pixray/text2image/files/d49b56e4-489c-49b8-8de8-29655076a177/tempfile.png"));
+//            ImageIO.write((RenderedImage) image, "png", file);
+//            byte[] bytes = Files.readAllBytes(file.toPath());
+//            currentDream.setThumbnail(bytes);
+//            DreamDAO.update(currentDream);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
         // create prompt for API
         StringBuilder prompt = new StringBuilder();
-        ListIterator<Symbol> iterator = matchesList.listIterator();
+        ListIterator<Symbol> iterator = matchesListView.getItems().listIterator();
         while (iterator.hasNext()) {
             Symbol symbol = iterator.next();
             prompt.append(symbol.getName());
-            if (iterator.nextIndex() != matchesList.size())
+            if (iterator.nextIndex() != matchesListView.getItems().size())
                 prompt.append(" | ");
         }
+        System.out.println("prompt.toString() = " + prompt.toString());
 
         // start API request
         try {

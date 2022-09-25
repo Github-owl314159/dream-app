@@ -74,8 +74,8 @@ public class NLP
         for (String token : input)
         {
             AnalyzedToken analyzedToken = new AnalyzedToken(token);
-//            analyzedToken.setLemma(token);
-            analyzedToken.setLemma(new Sentence(token).lemma(0));
+            analyzedToken.setLemma(token);
+//            analyzedToken.setLemma(new Sentence(token).lemma(0));
             output.add(analyzedToken);
             //System.out.println("Added lemma: " + analyzedToken.getLemma());             //TODO
         }

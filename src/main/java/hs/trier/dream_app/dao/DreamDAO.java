@@ -19,6 +19,8 @@ public class DreamDAO {
     private static final String DATE_COLUMN = "date";
     private static final String NOTES_COLUMN = "notes";
     private static final String MOOD_COLUMN = "mood";
+
+    private static final String THUMBNAIL_COLUMN = "thumbnail";
     private static final ObservableList<Dream> DREAMS_LIST = FXCollections.observableArrayList();
 
     public static void initialize() {
@@ -71,9 +73,9 @@ public class DreamDAO {
     public static int update(Dream dream) {
         int rows = CRUDHelper.update(
                 TABLE_NAME,
-                new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN},
-                new String[]{Util.encodeBase64(dream.getTitle()), Util.encodeBase64(dream.getContent()), Util.encodeBase64(dream.getDate()), Util.encodeBase64(dream.getNotes()), Util.encodeBase64(dream.getMood())},
-                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR},
+                new String[]{TITLE_COLUMN, TEXT_COLUMN, DATE_COLUMN, NOTES_COLUMN, MOOD_COLUMN, THUMBNAIL_COLUMN},
+                new Object[]{Util.encodeBase64(dream.getTitle()), Util.encodeBase64(dream.getContent()), Util.encodeBase64(dream.getDate()), Util.encodeBase64(dream.getNotes()), Util.encodeBase64(dream.getMood()), dream.getThumbnail()},
+                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.BLOB},
                 ID_COLUMN,
                 Types.INTEGER,
                 dream.getId()
