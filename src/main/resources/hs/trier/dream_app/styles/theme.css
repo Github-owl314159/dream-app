@@ -63,6 +63,6 @@ DialogPane > GridPane {
     -fx-underline: true;
 }
 
-.html-editor .grid ToolBar {
-    visibility: hidden;
+.date-picker-popup .month-year-pane {
+	-fx-background-color: #303A4B;
 }

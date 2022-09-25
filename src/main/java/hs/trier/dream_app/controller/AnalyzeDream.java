@@ -8,7 +8,6 @@ import hs.trier.dream_app.model.AnalyzedToken;
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.model.NLP;
 import hs.trier.dream_app.model.Symbol;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,9 +16,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
-
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 
 public class AnalyzeDream {
     @FXML
@@ -27,34 +28,16 @@ public class AnalyzeDream {
     @FXML
     private ImageView deepImageView;
     @FXML
-    private Label titleLabel;
-    @FXML
     private Button getDeepDreamButton;
     @FXML
     private TextArea descriptionTextArea;
     @FXML
     private WebView dreamContent = new WebView();
-    private ObservableList<Symbol> matches;
+
+    private ObservableList<Symbol> matchesList;
 
     @FXML
     private void initialize() {
-
-        // display name of symbol in listView
-        matchesListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Symbol item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null || item.getName() == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
-
-        // init list for found matches
-        matches = FXCollections.observableArrayList();
 
         // set event listener
         getDeepDreamButton.setOnAction(this::getDeepDream);
@@ -63,45 +46,60 @@ public class AnalyzeDream {
         matchesListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, ov, nv) -> descriptionTextArea.setText(nv.getDescription()));
 
-        // disable button if no match is available
-        getDeepDreamButton.disableProperty().bind(Bindings.isEmpty(matches));
+        // disable button if no match is available      //TODO Martin: Würde ich rausnehmen, selbst bei keinen matches sollte der User die Option auf ein schönes Bild haben ;)
+        //getDeepDreamButton.disableProperty().bind(Bindings.isEmpty(matchesList));
     }
 
     public void analyze(Dream selectedItem) {
-        // clear list
-        matches.clear();
 
-        // set title
-        titleLabel.setText(selectedItem.getTitle());
+        //merge dream title and content in string to analyze, change linebreaks to HTML
+        String stringToAnalyze = "Title: " + selectedItem.getTitle() + "<br><br>";
+        stringToAnalyze = stringToAnalyze + selectedItem.getContent().replaceAll(Pattern.quote("\n"), "<br>");
 
-        // tokenize content of selected dream
-        List<String> tokens = List.of(NLP.tokenize(selectedItem.getContent()));
+        // tokenize the string
+        String[] tokens = NLP.tokenize(stringToAnalyze);
 
         // get tokens to search for
-        List<AnalyzedToken> analyzedTokens = NLP.lemmatize(NLP.filter(tokens));
+        List<AnalyzedToken> filteredTokens = NLP.lemmatize(NLP.filter(tokens));
 
+        // rebuild original string, mark found dream symbols red and search for dream symbols. Use Set to remove duplicates.
         StringBuilder sb = new StringBuilder();
-        boolean match;
-        for (String token : tokens) {
-            match = false;
-            for (AnalyzedToken analyzedToken : analyzedTokens) {
-
-                if (token.equalsIgnoreCase(analyzedToken.getToken())) {
-
+        Set<Symbol> matchesSet = new HashSet<>();
+        Boolean foundsomething;
+        for ( String token : tokens) {
+            foundsomething = false;
+            for (AnalyzedToken analyzedToken : filteredTokens) {
+                if (token.toLowerCase().equals(analyzedToken.getToken())) {
                     List<Symbol> foundSymbols = SymbolDAO.searchSymbols(analyzedToken.getLemma());
                     if (!foundSymbols.isEmpty()) {
-                        match = true;
-                        sb.append("<span style=\"color: green;\">").append(token).append("</span>");
-                        matches.addAll(foundSymbols);
+                        foundsomething = true;
+                        sb.append("<span style=\"color: #815ADD;\"><b>" + token + "</b></span>");
+                        for (Symbol symbol : foundSymbols) {
+                            matchesSet.add(symbol);
+                            //System.out.println("Added match: " + symbol.getName());             //TODO
+                        }
                     }
                 }
             }
-            if (!match)
+            if (!foundsomething) {
                 sb.append(token);
+            }
         }
 
-        matchesListView.setItems(matches);
-        dreamContent.getEngine().loadContent(sb.toString(), "text/html");
+        // Convert Set to Observable List and populate Listview
+        matchesList = FXCollections.observableArrayList(new ArrayList<>());
+        for (Object symbol : matchesSet) {
+            matchesList.add((Symbol) symbol);
+        }
+
+        // sort list and select first item
+        matchesListView.setItems(matchesList.sorted());
+        if (!matchesListView.getItems().isEmpty()) {
+            matchesListView.getSelectionModel().select(0);
+        }
+
+        // Load rebuilt string into WebView
+        dreamContent.getEngine().loadContent(sb.toString(),"text/html");
     }
 
     public static AnalyzeDream getController() {
@@ -126,11 +124,11 @@ public class AnalyzeDream {
     private void getDeepDream(ActionEvent actionEvent) {
         // create prompt for API
         StringBuilder prompt = new StringBuilder();
-        ListIterator<Symbol> iterator = matches.listIterator();
+        ListIterator<Symbol> iterator = matchesList.listIterator();
         while (iterator.hasNext()) {
             Symbol symbol = iterator.next();
             prompt.append(symbol.getName());
-            if (iterator.nextIndex() != matches.size())
+            if (iterator.nextIndex() != matchesList.size())
                 prompt.append(" | ");
         }
 

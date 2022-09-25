@@ -36,10 +36,13 @@ public class Symbol {
 
     @Override
     public String toString() {
+        return name.get();
+        /*
         return "Symbol{" +
                 "id=" + id +
                 ", name=" + name +
                 ", description=" + description +
                 '}';
+         */
     }
 }

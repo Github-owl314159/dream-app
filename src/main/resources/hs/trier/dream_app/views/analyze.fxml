@@ -11,9 +11,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.AnalyzeDream">
+<VBox alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hs.trier.dream_app.controller.AnalyzeDream">
     <children>
-        <Label styleClass="header" text="Dream Analyze" underline="true">
+        <Label styleClass="header" text="Analyze Dream" underline="true">
             <font>
                 <Font name="Segoe Print" size="16.0" />
             </font>
@@ -22,33 +22,20 @@
             <children>
                 <VBox spacing="20.0" HBox.hgrow="SOMETIMES">
                     <children>
-                        <HBox spacing="15.0" styleClass="bg-dark">
-                            <Label text="Dream Title:">
-                                <font>
-                                    <Font name="Segoe Print" size="12.0" />
-                                </font>
-                            </Label>
-                            <Label fx:id="titleLabel" text="Label" />
-                        </HBox>
-                        <WebView fx:id="dreamContent" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" />
+                  <WebView fx:id="dreamContent" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" VBox.vgrow="ALWAYS" />
                     </children>
                 </VBox>
-                <VBox spacing="20.0">
+                <VBox alignment="TOP_CENTER" spacing="20.0">
                     <children>
-                        <HBox alignment="CENTER" fillHeight="false" spacing="15.0" styleClass="bg-dark">
-                            <children>
-                                <Label text="Dream Symbols Found">
-                                    <font>
-                                        <Font name="Segoe Print" size="12.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </HBox>
-                        <ListView fx:id="matchesListView" prefHeight="200.0" prefWidth="200.0" />
-                        <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+                          <Label text="Found Dream Symbols:">
+                              <font>
+                                  <Font name="Segoe Print" size="12.0" />
+                              </font>
+                          </Label>
+                  <ListView fx:id="matchesListView" prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
                         <HBox alignment="TOP_CENTER" spacing="10.0">
                             <children>
-                        <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
                                 <Button fx:id="getDeepDreamButton" mnemonicParsing="false" text="Get DeepDream Image">
                                     <font>
                                         <Font name="Segoe UI Bold" size="12.0" />
@@ -56,16 +43,16 @@
                                 </Button>
                             </children>
                         </HBox>
-                        <ImageView fx:id="deepImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="deepImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
                 </VBox>
             </children>
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
         </HBox>
     </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </VBox>

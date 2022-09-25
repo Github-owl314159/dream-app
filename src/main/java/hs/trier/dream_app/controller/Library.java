@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 
 import java.util.Optional;
@@ -31,10 +32,11 @@ public class Library {
     private TextField moodTextField;
     @FXML
     private TextArea notesTextArea;
+    @FXML
+    private ImageView deepDreamImageView;
 
     @FXML
     private void initialize() {
-
 
         // create table columns and set bindings
         TableColumn<Dream, String> dateTableColumn = new TableColumn<>("Date");
@@ -90,7 +92,7 @@ public class Library {
             }
         });
 
-        // set event handler                                     //TODO Martin: gehört das nicht ins fxml?
+        // set event handler
         editDreamButton.setOnAction(this::editDream);
         deleteDreamButton.setOnAction(this::deleteDream);
         searchDreamSymbolsButton.setOnAction(this::searchDreamSymbols);

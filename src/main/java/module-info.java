@@ -9,6 +9,7 @@ module hs.trier.dream_app {
     requires javafx.swing;
     requires javafx.web;
     requires json;
+    requires stanford.corenlp;
 
     opens hs.trier.dream_app to javafx.fxml;
     opens hs.trier.dream_app.model to javafx.fxml;

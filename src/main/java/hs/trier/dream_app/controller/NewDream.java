@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class NewDream {
     @FXML
@@ -95,6 +96,7 @@ public class NewDream {
 
         // consume event
         actionEvent.consume();
+        Util.getInstance().loadFXML("views/library.fxml");
     }
 
     public void editDream(Dream selectedItem) {

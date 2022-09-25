@@ -6,8 +6,10 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 
 public class Util {
 
@@ -55,7 +57,7 @@ public class Util {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        contentPane.getChildren().clear();               //TODO Martin: Dass der Content in der Util-Klasse geändert wird, da wär ich nach GBO nicht drauf gekommen^^
+        contentPane.getChildren().clear();
         contentPane.getChildren().add(root);
 
         return loader.getController();
@@ -66,4 +68,22 @@ public class Util {
         return LocalDate.parse(date, formatter);
     }
 
+    String traum = "BlaBla Blubber\n" +
+            "blubb tada \" \" usw...";
+
+    public static String encodeBase64(String input) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        String output = encoder.encodeToString(input.getBytes(StandardCharsets.UTF_8));
+        System.out.println("Encoder Input: " + input);
+        System.out.println("Encoder Output: " + output);
+        return output;
+    }
+
+    public static String decodeBase64(String input) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        String output = new String(decoder.decode(input), StandardCharsets.UTF_8);
+        System.out.println("Decoder Input: " + input);
+        System.out.println("Decoder Output: " + output);
+        return output;
+    }
 }

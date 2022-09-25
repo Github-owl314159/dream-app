@@ -2,7 +2,7 @@ package hs.trier.dream_app.model;
 
 import java.util.*;
 import java.util.regex.Pattern;
-//import edu.stanford.nlp.simple.*;
+import edu.stanford.nlp.simple.*;
 
 public class NLP
 {
@@ -11,32 +11,33 @@ public class NLP
     public static String[] tokenize(String input) {
 
         //Split text into tokens using various delimiters AND keeping those (for rebuilding text for webview later on)
-
-        return input.split("((?<= )|(?= ))|" +
-                "((?<=,)|(?=,))|" +
+        return input.split("((?<=" + Pattern.quote(" ") + ")|(?=" + Pattern.quote(" ") + "))|" +
+                "((?<=" + Pattern.quote(",") + ")|(?=" + Pattern.quote(",") + "))|" +
                 "((?<=" + Pattern.quote(".") + ")|(?=" + Pattern.quote(".") + "))|" +
-                "((?<=:)|(?=:))|" +
-                "((?<=;)|(?=;))" +
+                "((?<=" + Pattern.quote(":") + ")|(?=" + Pattern.quote(":") + "))|" +
+                "((?<=" + Pattern.quote(";") + ")|(?=" + Pattern.quote(";") + "))|" +
                 "((?<=" + Pattern.quote("?") + ")|(?=" + Pattern.quote("?") + "))|" +
-                "((?<=!)|(?=!))" +
+                "((?<=" + Pattern.quote("!") + ")|(?=" + Pattern.quote("!") + "))|" +
                 "((?<=" + Pattern.quote("(") + ")|(?=" + Pattern.quote("(") + "))" +
                 "((?<=" + Pattern.quote(")") + ")|(?=" + Pattern.quote(")") + "))" +
                 "((?<=" + Pattern.quote("-") + ")|(?=" + Pattern.quote("-") + "))" +
                 "((?<=" + Pattern.quote("[") + ")|(?=" + Pattern.quote("[") + "))" +
                 "((?<=" + Pattern.quote("]") + ")|(?=" + Pattern.quote("]") + "))|" +
-                "((?<=_)|(?=_))|" +
-                "((?<=')|(?='))"
+                "((?<=" + Pattern.quote("<") + ")|(?=" + Pattern.quote("<") + "))|" +
+                "((?<=" + Pattern.quote(">") + ")|(?=" + Pattern.quote(">") + "))|" +
+                "((?<=" + Pattern.quote("_") + ")|(?=" + Pattern.quote("_") + "))|" +
+                "((?<=" + Pattern.quote("'") + ")|(?=" + Pattern.quote("'") + "))"
         );
     }
 
 
-    public static List<String> filter(List<String> input)
+    public static List<String> filter(String[] input)
     {
         // Filter raw tokens: delete stopwords and duplicates
-
-        Set<String> tokenSet = new LinkedHashSet<>();
+        Set<String> tokenSet = new LinkedHashSet<String>();
         for (String token : input ) {
             if ( !( token.equals(" ") |
+                    token.equals(".") |
                     token.equals(",") |
                     token.equals(":") |
                     token.equals(";") |
@@ -46,17 +47,22 @@ public class NLP
                     token.equals(")") |
                     token.equals("[") |
                     token.equals("]") |
+                    token.equals("<") |
+                    token.equals(">") |
                     token.equals("_") |
                     token.equals("-") |
                     token.equals("'") ) ) {
-                tokenSet.add(token);
+                tokenSet.add(token.toLowerCase());
+                //System.out.println("Added token to filtered token list: " + token);             //TODO
             }
         }
 
-        List<String> output = new ArrayList<>(tokenSet);
+        List<String> output = new ArrayList<>();
+        output.addAll(tokenSet);
         for (String stopword : stopWords) {
             output.removeIf(string -> string.toLowerCase().equals(stopword));
         }
+        //System.out.println(output.toString());             //TODO
         return output;
     }
 
@@ -64,16 +70,14 @@ public class NLP
     public static List<AnalyzedToken> lemmatize(List<String> input)
     {
         // Lemmatize the input tokens, create an AnalyzedToken-Object and set original token and lemma
-
         List<AnalyzedToken> output = new ArrayList<>();
         for (String token : input)
         {
             AnalyzedToken analyzedToken = new AnalyzedToken(token);
-
-            analyzedToken.setLemma(token);
-//            analyzedToken.setLemma(new Sentence(token).lemma(0));
-
+//            analyzedToken.setLemma(token);
+            analyzedToken.setLemma(new Sentence(token).lemma(0));
             output.add(analyzedToken);
+            //System.out.println("Added lemma: " + analyzedToken.getLemma());             //TODO
         }
         return output;
     }
