@@ -5,7 +5,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import hs.trier.dream_app.Util;
-import hs.trier.dream_app.controller.AnalyzeDream;
 import hs.trier.dream_app.model.Dream;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
@@ -30,9 +29,11 @@ public class HttpHandler {
     public static boolean ACTIVE_SESSION = false;
     private static String SESSION_ID;
     private static final String URL = "https://api.replicate.com/v1/predictions";
-    private static final String TOKEN_KEY = "48823b03d23f50184e879b36287408f9aacbbea5";
+    private static final String TOKEN_KEY = "";
     private static ImageView deepDreamImageView;
     private static Dream currentDream;
+    private static Label statusLabel;
+    private static ProgressIndicator progressIndicator;
     private static final ScheduledService<Void> subroutine = new ScheduledService<>() {
         @Override
         protected Task<Void> createTask() {
@@ -59,11 +60,21 @@ public class HttpHandler {
 
                         // check status
                         String status = jsonObject.getString("status");
-                        String imageURL = null;
+                        String imageURL;
                         switch (status) {
-                            case "starting" -> System.out.println("Replicate.com is starting ...\n");
+                            case "starting" -> {
+                                String statusMessage = "Replicate.com is starting ...\n";
+                                System.out.println(statusMessage);
+                                Platform.runLater(() -> {
+                                    statusLabel.setText(statusMessage);
+                                });
+                            }
                             case "processing" -> {
-                                System.out.println("Replicate.com is processing ...\n");
+                                String statusMessage = "Replicate.com is processing ...\n";
+                                System.out.println(statusMessage);
+                                Platform.runLater(() -> {
+                                    statusLabel.setText(statusMessage);
+                                });
 
                                 if (outputJSON != null && outputJSON.length() != 0) {
                                     imageURL = outputJSON.getString(outputJSON.length() - 1);
@@ -80,7 +91,12 @@ public class HttpHandler {
                                 }
                             }
                             case "succeeded" -> {
-                                System.out.println("Replicate.com has succeeded!\n");
+                                String statusMessage = "Replicate.com has succeeded!\nYou can close the window now.";
+                                System.out.println(statusMessage);
+                                Platform.runLater(() -> {
+                                    statusLabel.setText(statusMessage);
+                                    progressIndicator.setDisable(true);
+                                });
 
                                 if (outputJSON != null && outputJSON.length() != 0) {
                                     imageURL = outputJSON.getString(outputJSON.length() - 1);
@@ -103,12 +119,21 @@ public class HttpHandler {
                                 endTask();
                             }
                             case "failed" -> {
-                                System.out.println("Replicate.com has failed!\n");
+                                String statusMessage = "Replicate.com has failed!\n";
+                                System.out.println(statusMessage);
+                                Platform.runLater(() -> {
+                                    statusLabel.setText(statusMessage);
+                                });
 
                                 endTask();
                             }
                             case "canceled" -> {
-                                System.out.println("Replicate.com has been canceled!\n");
+                                String statusMessage = "Replicate.com has been cancelled!\n";
+                                System.out.println(statusMessage);
+                                Platform.runLater(() -> {
+                                    statusLabel.setText(statusMessage);
+                                    progressIndicator.setDisable(true);
+                                });
 
                                 if (outputJSON != null && outputJSON.length() != 0) {
                                     imageURL = outputJSON.getString(outputJSON.length() - 1);
@@ -180,6 +205,7 @@ public class HttpHandler {
 
             // init dialog
             Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Deep Dream Image");
             dialog.setResizable(true);
 
             // load dialog fxml
@@ -191,8 +217,10 @@ public class HttpHandler {
             }
 
             deepDreamImageView = (ImageView) dialogPane.lookup("#deepDreamImageView");
+            statusLabel = (Label) dialogPane.lookup("#statusLabel");
+            progressIndicator = (ProgressIndicator) dialogPane.lookup("#progressIndicator");
 
-            dialogPane.getButtonTypes().remove(ButtonType.OK);
+            dialogPane.getButtonTypes().removeAll(ButtonType.OK, ButtonType.CANCEL);
 
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(dialogPane);

@@ -14,30 +14,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.ArrayList;
 
 public class AnalyzeDream {
     @FXML
     private ListView<Symbol> matchesListView;
-    @FXML
-    private ImageView deepImageView;
     @FXML
     private Button getDeepDreamButton;
     @FXML
     private TextArea descriptionTextArea;
     @FXML
     private WebView dreamContent = new WebView();
-
     private Dream currentDream;
     private StringBuilder prompt;
 
@@ -71,7 +63,7 @@ public class AnalyzeDream {
         // rebuild original string, mark found dream symbols red and search for dream symbols. Use Set to remove duplicates.
         StringBuilder sb = new StringBuilder();
         Set<Symbol> matchesSet = new HashSet<>();
-        Boolean foundsomething;
+        boolean foundsomething;
         for (String token : tokens) {
             foundsomething = false;
             for (AnalyzedToken analyzedToken : filteredTokens) {
@@ -112,10 +104,6 @@ public class AnalyzeDream {
         return (AnalyzeDream) Util.getInstance().loadFXML("views/analyze.fxml");
     }
 
-    public void setDeepImageView(Image image) {
-        deepImageView.setImage(image);
-    }
-
     @FXML
     private void cancel(ActionEvent actionEvent) {
         try {
@@ -151,10 +139,6 @@ public class AnalyzeDream {
         System.out.println("prompt.toString() = " + prompt.toString());
 
         deepDreamDialog();
-    }
-
-    public void saveDeepImage(Image image) {
-        currentDream.setThumbnail(image);
     }
 
     public void deepDreamDialog() {
