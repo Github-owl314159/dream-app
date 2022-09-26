@@ -27,6 +27,6 @@ public class Navigation {
 
     @FXML
     private void onSymbolsButton() {
-        Util.getInstance().loadFXML("views/symbols/symbols.fxml");
+        Util.getInstance().loadFXML("views/symbols.fxml");
     }
 }

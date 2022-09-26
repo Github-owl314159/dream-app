@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 
 import java.awt.image.BufferedImage;
 
-public class DeepImage {
+public class Thumbnail {
     private final static ObjectProperty<Image> DEEP_IMG = new SimpleObjectProperty<>();
 
     public static Image getDeepImage() {

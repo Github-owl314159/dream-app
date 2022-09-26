@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.ImageView?>
+
+<DialogPane contentText="Generating Deep Dream. This can take a while!" headerText="Deep Dream Chill Lounge" prefHeight="459.0" prefWidth="482.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <buttonTypes>
+        <ButtonType fx:constant="OK" />
+        <ButtonType fx:constant="CANCEL" />
+    </buttonTypes>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+   <graphic>
+      <ProgressIndicator />
+   </graphic>
+   <content>
+      <ImageView fx:id="deepDreamImageView" pickOnBounds="true" preserveRatio="true" />
+   </content>
+</DialogPane>

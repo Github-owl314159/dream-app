@@ -68,6 +68,8 @@ public class Library {
             dateTextField.setText(dream.getDate());
             moodTextField.setText(dream.getMood());
             notesTextArea.setText(dream.getNotes());
+            if (dream.getThumbnail() != null)
+                deepDreamImageView.setImage(dream.getThumbnail());
 
             // visual selection
             dreamsTableView.requestFocus();
@@ -83,6 +85,8 @@ public class Library {
                 dateTextField.setText(nv.getDate());
                 moodTextField.setText(nv.getMood());
                 notesTextArea.setText(nv.getNotes());
+                if (nv.getThumbnail() != null)
+                    deepDreamImageView.setImage(nv.getThumbnail());
             } else {
                 titleTextField.clear();
                 contentTextArea.clear();

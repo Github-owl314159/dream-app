@@ -5,7 +5,6 @@ module hs.trier.dream_app {
     requires java.desktop;
     requires org.xerial.sqlitejdbc;
     requires unirest.java;
-    requires com.google.gson;
     requires javafx.swing;
     requires javafx.web;
     requires json;
@@ -15,7 +14,6 @@ module hs.trier.dream_app {
     opens hs.trier.dream_app.model to javafx.fxml;
     opens hs.trier.dream_app.controller to javafx.fxml;
     opens hs.trier.dream_app.dao to javafx.fxml;
-    opens hs.trier.dream_app.api to com.google.gson;
     exports hs.trier.dream_app;
     exports hs.trier.dream_app.model;
     exports hs.trier.dream_app.dao;

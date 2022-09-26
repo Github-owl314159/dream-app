@@ -1,6 +1,8 @@
 package hs.trier.dream_app.model;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
 
 public class Dream {
     private final int id;
@@ -9,8 +11,7 @@ public class Dream {
     private final SimpleStringProperty date;
     private final SimpleStringProperty notes;
     private final SimpleStringProperty mood;
-
-    private byte[] thumbnail = null;
+    private final SimpleObjectProperty<Image> thumbnail;
 
     public Dream(int id, String title, String content, String date, String notes, String mood) {
         this.id = id;
@@ -19,6 +20,7 @@ public class Dream {
         this.date = new SimpleStringProperty(date);
         this.notes = new SimpleStringProperty(notes);
         this.mood = new SimpleStringProperty(mood);
+        thumbnail = new SimpleObjectProperty<>();
     }
 
     public int getId() {
@@ -45,26 +47,32 @@ public class Dream {
         return mood.get();
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title.set(title);
     }
 
-    public void setContent(String content) { this.content.set(content); }
+    public void setContent(String content) {
+        this.content.set(content);
+    }
 
-    public void setDate(String date)
-    {
+    public void setDate(String date) {
         this.date.set(date);
     }
 
-    public void setNotes(String notes)
-    {
+    public void setNotes(String notes) {
         this.notes.set(notes);
     }
 
-    public void setMood(String mood)
-    {
+    public void setMood(String mood) {
         this.mood.set(mood);
+    }
+
+    public Image getThumbnail() {
+        return thumbnail.get();
+    }
+
+    public void setThumbnail(Image thumbnail) {
+        this.thumbnail.set(thumbnail);
     }
 
     @Override
@@ -77,13 +85,5 @@ public class Dream {
                 ", notes=" + notes +
                 ", mood=" + mood +
                 '}';
-    }
-
-    public void setThumbnail(byte[] thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public byte[] getThumbnail() {
-        return thumbnail;
     }
 }

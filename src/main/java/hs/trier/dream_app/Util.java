@@ -74,16 +74,12 @@ public class Util {
     public static String encodeBase64(String input) {
         Base64.Encoder encoder = Base64.getEncoder();
         String output = encoder.encodeToString(input.getBytes(StandardCharsets.UTF_8));
-        System.out.println("Encoder Input: " + input);
-        System.out.println("Encoder Output: " + output);
         return output;
     }
 
     public static String decodeBase64(String input) {
         Base64.Decoder decoder = Base64.getDecoder();
         String output = new String(decoder.decode(input), StandardCharsets.UTF_8);
-        System.out.println("Decoder Input: " + input);
-        System.out.println("Decoder Output: " + output);
         return output;
     }
 }

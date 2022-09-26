@@ -125,7 +125,7 @@ public class Symbols {
         // load dialog fxml
         DialogPane dialogPane;
         try {
-            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/symbols/edit-dialog.fxml")));
+            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/dialogs/edit-dialog.fxml")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -194,7 +194,7 @@ public class Symbols {
         // load dialog fxml
         DialogPane dialogPane;
         try {
-            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/symbols/add-dialog.fxml")));
+            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/dialogs/add-dialog.fxml")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

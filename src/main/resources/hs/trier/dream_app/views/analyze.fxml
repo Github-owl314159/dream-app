@@ -43,6 +43,7 @@
                                 </Button>
                             </children>
                         </HBox>
+                  <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
                   <ImageView fx:id="deepImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
                 </VBox>

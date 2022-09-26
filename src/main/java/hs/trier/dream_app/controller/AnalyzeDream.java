@@ -3,30 +3,23 @@ package hs.trier.dream_app.controller;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import hs.trier.dream_app.Util;
 import hs.trier.dream_app.api.HttpHandler;
-import hs.trier.dream_app.dao.DreamDAO;
 import hs.trier.dream_app.dao.SymbolDAO;
 import hs.trier.dream_app.model.AnalyzedToken;
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.model.NLP;
 import hs.trier.dream_app.model.Symbol;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.List;
@@ -46,6 +39,7 @@ public class AnalyzeDream {
     private WebView dreamContent = new WebView();
 
     private Dream currentDream;
+    private StringBuilder prompt;
 
     @FXML
     private void initialize() {
@@ -57,7 +51,7 @@ public class AnalyzeDream {
         matchesListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, ov, nv) -> descriptionTextArea.setText(nv.getDescription()));
 
-        // disable button if no match is available      //TODO Martin: Würde ich rausnehmen, selbst bei keinen matches sollte der User die Option auf ein schönes Bild haben ;)
+        // disable button if no match is available
         //getDeepDreamButton.disableProperty().bind(Bindings.isEmpty(matchesList));
     }
 
@@ -146,7 +140,7 @@ public class AnalyzeDream {
 //        }
 
         // create prompt for API
-        StringBuilder prompt = new StringBuilder();
+        prompt = new StringBuilder();
         ListIterator<Symbol> iterator = matchesListView.getItems().listIterator();
         while (iterator.hasNext()) {
             Symbol symbol = iterator.next();
@@ -156,11 +150,63 @@ public class AnalyzeDream {
         }
         System.out.println("prompt.toString() = " + prompt.toString());
 
-        // start API request
+        deepDreamDialog();
+    }
+
+    public void saveDeepImage(Image image) {
+        currentDream.setThumbnail(image);
+    }
+
+    public void deepDreamDialog() {
+        // init dialog
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setResizable(true);
+
+        // load dialog fxml
+        DialogPane dialogPane;
         try {
-            HttpHandler.connectWithAPI(prompt.toString());
-        } catch (UnirestException e) {
+            dialogPane = FXMLLoader.load(Objects.requireNonNull(Util.getAbsoluteURL("views/dialogs/deepdream-dialog.fxml")));
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // get handles on input fields/labels
+        ListView<String> symbolsListView = (ListView<String>) dialogPane.lookup("#symbolsListView");
+        TextArea promptTextArea = (TextArea) dialogPane.lookup("#promptTextArea");
+        TextField promptExtTextField = (TextField) dialogPane.lookup("#promptExtTextField");
+
+        promptExtTextField.textProperty().addListener((observableValue, oldV, newV) -> {
+            promptTextArea.clear();
+            promptTextArea.setText(prompt.toString() + " | " + newV);
+        });
+
+        matchesListView.getItems().forEach(symbol -> symbolsListView.getItems().add(symbol.getName()));
+        promptTextArea.setText(prompt.toString());
+
+        // convert user data to Symbol and save it if user clicked on OK button
+        dialog.setResultConverter((buttonType) -> {
+            String result = null;
+
+            if (buttonType == ButtonType.OK)
+                result = promptTextArea.getText();
+
+            return result;
+        });
+
+        // disable other windows
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(matchesListView.getScene().getWindow());
+
+        dialog.setDialogPane(dialogPane);
+        Optional<String> resultOpt = dialog.showAndWait();
+
+        // start API request
+        resultOpt.ifPresent(prompt1 -> {
+            try {
+                HttpHandler.connectWithAPI(prompt1, currentDream);
+            } catch (UnirestException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
