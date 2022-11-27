@@ -1,6 +1,6 @@
-package hs.trier.dream_app.dao;
+package hs.trier.dream_app.model.dao;
 
-import hs.trier.dream_app.Database;
+import hs.trier.dream_app.model.Database;
 import hs.trier.dream_app.model.Symbol;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

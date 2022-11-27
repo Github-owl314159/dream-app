@@ -1,8 +1,8 @@
 package hs.trier.dream_app.controller;
 
 import hs.trier.dream_app.Util;
-import hs.trier.dream_app.dao.CRUDHelper;
-import hs.trier.dream_app.dao.DreamDAO;
+import hs.trier.dream_app.model.dao.CRUDHelper;
+import hs.trier.dream_app.model.dao.DreamDAO;
 import hs.trier.dream_app.model.Dream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 public class NewDream {
     @FXML

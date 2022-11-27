@@ -3,7 +3,7 @@ package hs.trier.dream_app.controller;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import hs.trier.dream_app.Util;
 import hs.trier.dream_app.api.HttpHandler;
-import hs.trier.dream_app.dao.SymbolDAO;
+import hs.trier.dream_app.model.dao.SymbolDAO;
 import hs.trier.dream_app.model.AnalyzedToken;
 import hs.trier.dream_app.model.Dream;
 import hs.trier.dream_app.model.NLP;

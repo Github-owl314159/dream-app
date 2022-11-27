@@ -1,4 +1,4 @@
-package hs.trier.dream_app;
+package hs.trier.dream_app.model;
 
 import org.sqlite.SQLiteConfig;
 
@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Database {
-    public static final String DB_LOC = Objects.requireNonNull(Database.class.getResource("database/dream-app.db")).toExternalForm();
+    public static final String DB_LOC = Objects.requireNonNull(Database.class.getResource("/hs/trier/dream_app/database/dream-app.db")).toExternalForm();
 
     public static Connection connect() {
         String dbPrefix = "jdbc:sqlite:";

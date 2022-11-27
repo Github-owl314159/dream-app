@@ -1,8 +1,8 @@
 package hs.trier.dream_app;
 
-import hs.trier.dream_app.dao.DeepDreamDAO;
-import hs.trier.dream_app.dao.DreamDAO;
-import hs.trier.dream_app.dao.SymbolDAO;
+import hs.trier.dream_app.model.Database;
+import hs.trier.dream_app.model.dao.DreamDAO;
+import hs.trier.dream_app.model.dao.SymbolDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static hs.trier.dream_app.Database.initializeDatabase;
+import static hs.trier.dream_app.model.Database.initializeDatabase;
 
 public class DreamApp extends Application {
 
@@ -31,7 +31,7 @@ public class DreamApp extends Application {
 
     public static void main(String[] args) {
 
-        boolean dbStatus = initializeDatabase();
+        boolean dbStatus = Database.initializeDatabase();
 
         if (!dbStatus)
             System.exit(-1);

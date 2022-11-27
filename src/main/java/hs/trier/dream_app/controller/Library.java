@@ -1,7 +1,7 @@
 package hs.trier.dream_app.controller;
 
 import hs.trier.dream_app.Util;
-import hs.trier.dream_app.dao.DreamDAO;
+import hs.trier.dream_app.model.dao.DreamDAO;
 import hs.trier.dream_app.model.Dream;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;

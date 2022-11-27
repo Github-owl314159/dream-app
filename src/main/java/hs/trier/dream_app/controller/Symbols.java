@@ -1,7 +1,7 @@
 package hs.trier.dream_app.controller;
 
 import hs.trier.dream_app.Util;
-import hs.trier.dream_app.dao.SymbolDAO;
+import hs.trier.dream_app.model.dao.SymbolDAO;
 import hs.trier.dream_app.model.Symbol;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
